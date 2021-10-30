@@ -1,0 +1,37 @@
+@media screen and (max-width: 600) {
+  .css-480o17-MuiGrid-root {
+    padding-top: 50px;
+    padding-left: 100px;
+  }
+}
+
+.css-480o17-MuiGrid-root {
+  padding-top: 50px;
+  padding-left: 120px;
+}
+.css-480o17-MuiGrid-root > .MuiGrid-item {
+}
+.css-1v5z4dq-MuiPaper-root-MuiCard-root {
+  height: 160px;
+
+  border-radius: 0.3em;
+  box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mainBody {
+  minwidth: 200;
+}
+
+bullet {
+  display: "inline-block";
+  margin: "0 2px";
+  transform: "scale(0.8)";
+}
+
+title {
+  fontsize: 14;
+}
+
+pos {
+  marginbottom: 12;
+}
