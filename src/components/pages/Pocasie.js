@@ -1,26 +1,62 @@
 import React from "react";
+import { useEffect } from "react";
 import '../../App.css';
 import '../CardSlider.css'
+import './Pocasie.css'
 import CardSlider from "../CardSlider";
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
+import { motion } from "framer-motion";
+//https://www.youtube.com/watch?v=LQcgGcLJhvg&ab_channel=MahmoudShehata
+
+import { teplota } from "../../App";
+import WeatherCard from "../WeatherCard";
+
+import highTemperature from '../images/weatherImages/highTemperature.png'
+import rain from '../images/weatherIcons/Rain-4x.png'
+
+var temperature;
 
 export default function Pocasie() {
 
-    const sliderClick = (slider) => {
-        console.log(slider.target.id)
+    temperature = localStorage.getItem('temperature');
+    console.log("ini temperature");
+    console.log(temperature);
+
+    useEffect(()=>{
+      temperature = localStorage.getItem('temperature');
+      const interval =setInterval (() =>{
+        temperature = localStorage.getItem('temperature');
+        console.log(temperature);
+      },10000)
+      
+      return () =>clearImmediate(interval)
+})
+
+    const slideLeft = () => {
+        var slider = document.getElementById("slider");
+        slider.scrollLeft = slider.scrollLeft - 500;
     }
 
-    const slides =[{image:'https://picsum.photos/320/250',title:"Livingroom", description:'Toto je popis',id:'/livingroom', clickEvent:sliderClick},
-                  {image:'https://picsum.photos/320/250',title:"Toto je druhy nazov", description:'Toto je druhy popis', id:'/bedroom', clickEvent:sliderClick},
-                  {image:'https://picsum.photos/320/250',title:"Toto je treti nazov", description:'Toto je treti popis', clickEvent:sliderClick},
-                  {image:'https://picsum.photos/320/250',title:"Toto je stvrty nazov", description:'Toto je stvrty popis', clickEvent:sliderClick},
-                  {image:'https://picsum.photos/320/250',title:"Toto je piaty nazov", description:'Toto je piaty popis', clickEvent:sliderClick},
-                  {image:'https://picsum.photos/320/250',title:"Toto je siesty nazov", description:'Toto je siesty popis', clickEvent:sliderClick}
-];
+    const slideRight = () => {
+        var slider = document.getElementById("slider");
+        slider.scrollLeft = slider.scrollLeft + 500;
+    }
 
     return (
         <div className='body'>
-            <CardSlider slides={slides} id={slides.id}/>
+        <div className='main-slider-container'>
+        <MdChevronLeft size={40} className='slider-icon left' onClick={slideLeft}/>
+        <div id='slider'>
+        <WeatherCard weather="Teplota" id="temperature" value={temperature+" °C"} image={highTemperature}/>
+        <WeatherCard weather="Vlhkost" id="humidity" value="30 °C" image={highTemperature}/>
+        <WeatherCard weather="Tlak" id="pressure" value="30 °C" image={highTemperature}/>
+        <WeatherCard weather="Zrazky" id="rain" value="30 °C" image={rain}/>
+        <WeatherCard weather="Intenzita svetla" id="clouds" value="30 °C" image={highTemperature}/>
+        <WeatherCard weather="Znecistenie" id="dust" value="30 °C" image={highTemperature}/>
+        </div>
+        <MdChevronRight size={40} className='slider-icon right' onClick={slideRight}/>
+        </div>
         </div>
     );
 }

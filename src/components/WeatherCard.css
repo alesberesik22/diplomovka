@@ -1,0 +1,15 @@
+.slider-card {
+  text-align: center;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.value {
+  margin-top: 60px;
+}
+
+.image {
+  margin-top: 25px;
+  width: 40%;
+}
