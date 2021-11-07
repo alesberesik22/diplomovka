@@ -22,6 +22,7 @@ var temperature;
 
 function App() {
 
+  document.body.style.overflow='hidden'
 
   const getPosts = async () => {
   try {

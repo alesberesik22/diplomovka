@@ -1,0 +1,48 @@
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+}
+
+gridContainer {
+  paddingleft: "40px";
+  paddingright: "40px";
+}
+
+#slider {
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+  overflow-x: scroll;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.home-container {
+  width: 100%;
+  height: 90%;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  /* position: relative; */
+  display: flex;
+  align-items: center;
+}
+
+.karty {
+  margin-top: 0px;
+  margin-left: 110px;
+  /* left: 300px; */
+  width: 380px;
+  height: 500px;
+  /* background: white; */
+  /* border-radius: 10px; */
+  /* display: inline-block; */
+  /* margin-left: 10px; */
+  /* margin-right: 100px; */
+  /* box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3); */
+  /* cursor: pointer; */
+  /* dis: center; */
+}

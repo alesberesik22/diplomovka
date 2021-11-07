@@ -9,6 +9,7 @@
   width: 380px;
   background: white;
   font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
 }
 
 .nadpis {
@@ -37,6 +38,7 @@
   width: 100px;
   height: 100px;
   margin: 5px auto;
+  cursor: pointer;
 }
 
 .weather-info {
@@ -55,4 +57,3 @@
   align-items: center;
   flex-wrap: wrap;
 }
-
