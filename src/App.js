@@ -22,7 +22,8 @@ var temperature;
 
 function App() {
 
-  document.body.style.overflow='hidden'
+  // document.body.style.overflow='hidden'
+  document.body.classList.add("no-sroll");
 
   const getPosts = async () => {
   try {

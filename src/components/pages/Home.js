@@ -3,6 +3,7 @@ import "../../App.css";
 import "../CardSlider.css";
 import "./Home.css";
 import WeatherDashCard from "../WeatherDashCard";
+import ValueSider from "../ValueSlider";
 import WeatherCard from "../WeatherCard";
 
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
@@ -12,6 +13,9 @@ import { motion } from "framer-motion";
 export const WeatherIcons = {};
 
 export default function Home() {
+
+  document.body.classList.add("no-sroll")
+
   const slideLeft = () => {
     var slider = document.getElementById("slider");
     slider.scrollLeft = slider.scrollLeft - 1200;
@@ -38,6 +42,9 @@ export default function Home() {
           <div id="slider">
             <div className="karty">
               <WeatherDashCard />
+            </div>
+            <div className='karta2'>
+            <ValueSider/>
             </div>
           </div>
           <MdChevronRight

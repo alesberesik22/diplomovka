@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 360px;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+}
+.lightPicker {
+  position: absolute;
+  display: contents;
+  align-items: center;
+  /* align-items: center; */
+}
+.valuePicker {
+  margin-top: 80px;
+  position: absolute;
+}
+.settings-icon {
+  margin-left: 130px;
+  background: white;
+  border-radius: 100%;
+  position: absolute;
+  opacity: 0.5;
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+}
+.switch-light {
+  position: absolute;
+  margin-left: -130px;
+}
