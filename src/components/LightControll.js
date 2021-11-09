@@ -5,7 +5,6 @@ import './LightControll.css'
 import CircularSlider from '@fseehawer/react-circular-slider';
 import CircularColor from 'react-circular-color';
 
-import { MdChevronRight } from "react-icons/md";
 import Switch from '@mui/material/Switch';
 
 function LightControll(props) {
@@ -15,9 +14,6 @@ function LightControll(props) {
       };
       const handleLightIntensity = (intensity) => {
         console.log("Intenzita: " + intensity);
-      };
-      const lightSettings = () => {
-        console.log("Settings was pressed");
       };
       const getValue = (e,val) => {
         console.log(val);
@@ -31,11 +27,6 @@ function LightControll(props) {
         inputProps={{ 'aria-label': 'controlled' }}
       />
       </div>
-        <MdChevronRight
-          size={40}
-          className="settings-icon"
-          onClick={lightSettings}
-        />
         <div className='lightPicker'>
         <CircularColor size={350} onChange={handleColorChange} color={"#00cfff"}/>
         </div>
@@ -44,7 +35,7 @@ function LightControll(props) {
               onChange={handleLightIntensity}
               dataIndex={50}
               min={0}
-              max={255}
+              max={100}
               label="Osvetlenie"
               width={180}
           />

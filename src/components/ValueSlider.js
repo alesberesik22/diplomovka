@@ -6,9 +6,23 @@ import './ValueSlider.css'
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { MdChevronRight } from "react-icons/md";
+import { Modal } from "./Modal";
 
 
 function ValueSider(props) {
+
+  const [showModal, setShowModal] = useState(false);
+  const [click,setClick] = useState(false);
+
+    const handleClick = () => {
+      setClick(!click);
+      console.log("Hodnota nastavenia: ", click);
+    }
+
+  const openModal = () => {
+    setShowModal(prev => !prev);
+    console.log("Settings was pressed");
+  }
 
     const [lightInt, setLightInt] = useState('')
 
@@ -41,17 +55,23 @@ function ValueSider(props) {
           },
         }}
         orientation="vertical"
-        defaultValue={30}
+        defaultValue={0}
         aria-label="Temperature"
         onKeyDown={preventHorizontalKeyboardNavigation}
         onChange ={handleChange}
       />
     </Box>
+    <div className='on-off-icon' onClick={handleClick}>
+        <i className={click ? 'fas fa-lightbulb' : 'far fa-lightbulb'} />
+        </div>
           <MdChevronRight
           size={30}
           className="light-settings-icone"
-          onClick={lightSettings}
+          onClick={openModal}
         />
+        <div className='device-location'>Livingroom</div>
+        <div className='device-name'>Hlavne svetlo</div>
+        <Modal showModal={showModal} setShowModal={setShowModal}></Modal>
       </div>
   );
 }
