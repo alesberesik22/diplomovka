@@ -28,9 +28,25 @@
   width: 300px;
   z-index: -1;
 }
+.css-1yv5jnp-MuiSlider-root {
+  border-radius: 12px;
+  box-sizing: content-box;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+  color: #1976d2;
+  -webkit-tap-highlight-color: transparent;
+  height: 100%;
+  width: 4px;
+  padding: 0 13px;
+  width: 300px;
+  top: 1.3rem;
+  left: -0.8rem;
+}
 .light-settings-icone {
-  margin-left: 120px;
-  margin-top: -10px;
+  margin-left: 16rem;
+  margin-top: -0.5rem;
   background: white;
   border-radius: 100%;
   position: absolute;
@@ -41,7 +57,7 @@
 .on-off-icon {
   display: block;
   position: absolute;
-  margin-left: -7rem;
+  margin-left: -14rem;
   margin-top: -1.5rem;
   transform: translate(-100%, 60%);
   font-size: 1.5rem;
@@ -49,12 +65,12 @@
 }
 .device-name {
   position: absolute;
-  margin-left: -4.85rem;
+  margin-left: -10rem;
   margin-top: 5rem;
 }
 .device-location {
   position: absolute;
-  margin-left: -6rem;
+  margin-left: -12.5rem;
   margin-top: 6rem;
   opacity: 0.5;
   font-size: 0.75rem;
