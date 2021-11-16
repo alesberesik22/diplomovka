@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import "../App.css";
 import "./WeatherDashCard.css";
@@ -9,6 +9,7 @@ import wind from "./images/icons/wind.svg";
 import rain from "./images/icons/rain.svg";
 import light from "./images/icons/day.svg";
 import dust from "./images/icons/dust.svg";
+import { db } from "./firebase_conf";
 
 export const WeatherIcons = {
   Vlhkost: humidity,
@@ -57,22 +58,48 @@ const WeatherInfoComponent = (props) => {
 };
 
 function WeatherDashCard(props) {
+  const [weather, setWeather] = useState([]);
+
+  const getWeather = () => {
+    db.collection("Weather").onSnapshot(function (querySnapshot) {
+      setWeather(
+        querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          intenzitaSvetla: doc.data().intenzitaSvetla,
+          prach: doc.data().prach,
+          teplota: doc.data().teplota,
+          tlak: doc.data().tlak,
+          vlhkost: doc.data().vlhkost,
+          zrazky: doc.data().zrazky,
+        }))
+      );
+    });
+  };
+
+  useEffect(() => {
+    getWeather();
+  }); //blank to run only on first launch
+
   return (
     <div className="container">
       <div className="nadpis">Pocasie</div>
       <div className="temperature-value">
-        <div className="value">30 stupdnov </div>
+        {weather.map((poc) => (
+          <div className="value">{poc.teplota} Stupnov</div>
+        ))}
         <img className="image" src={temperature} alt="Ikona pocasia" />
       </div>
       <div className="weather-info">Informacie o pocasi</div>
-      <div className="weather-info-container">
-        <WeatherInfoComponent name="Vlhkost" value="90" />
-        <WeatherInfoComponent name="Zrazky" value="91" />
-        <WeatherInfoComponent name="Tlak" value="92" />
-        <WeatherInfoComponent name="Prach" value="93" />
-        <WeatherInfoComponent name="Svetlo" value="94" />
-        <WeatherInfoComponent name="Vietor" value="95" />
-      </div>
+      {weather.map((poc) => (
+        <div className="weather-info-container">
+          <WeatherInfoComponent name="Vlhkost" value={poc.vlhkost} />
+          <WeatherInfoComponent name="Zrazky" value={poc.zrazky} />
+          <WeatherInfoComponent name="Tlak" value={poc.tlak} />
+          <WeatherInfoComponent name="Prach" value={poc.prach} />
+          <WeatherInfoComponent name="Svetlo" value={poc.intenzitaSvetla} />
+          <WeatherInfoComponent name="Vietor" value="50 km/h" />
+        </div>
+      ))}
     </div>
   );
 }
