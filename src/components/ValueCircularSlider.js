@@ -1,6 +1,8 @@
 import React from "react";
 import CircularSlider from '@fseehawer/react-circular-slider';
 
+import { db } from "./firebase_conf";
+
 function ValueCircularSlider() {
   return (
     <CircularSlider

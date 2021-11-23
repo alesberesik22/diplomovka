@@ -9,41 +9,34 @@ import { MdChevronRight } from "react-icons/md";
 import { Modal } from "./Modal";
 import { db } from "./firebase_conf";
 
-var svetlo, off;
+var svetlo, status;
 
 function ValueSider(props) {
-  const getOnOff = () => {
-    db.collection("Devices")
-      .doc("VgkSjvc6cnNYmfBOT3vJ")
-      .onSnapshot((doc) => {
-        off = doc.data().off;
-      });
-  };
-
-  getOnOff();
   const [light, setLight] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [click, setClick] = useState(off);
-  console.log("OFF:", off);
+  const [click, setClick] = useState();
+  const [color, setColor] = useState("");
 
-  const getWeather = () => {
+  useEffect(() => {
+    getDeviceInfo();
+  }, []); //blank to run only on first launch
+
+  const getDeviceInfo = () => {
     db.collection("Devices")
       .doc("VgkSjvc6cnNYmfBOT3vJ")
-      .onSnapshot((doc) => {
-        setLight(doc.data());
+      .onSnapshot((docSnapshot) => {
+        setClick(docSnapshot.data().off);
+        setLight(docSnapshot.data().intensity);
+        setColor(docSnapshot.data().color);
       });
   };
-  getWeather();
-  useEffect(() => {
-    getWeather();
-  }); //blank to run only on first launch
+  //console.log("Light", light);
+  //blank to run only on first launch
 
   const handleClick = () => {
-    setClick(!click);
-    off = !off;
-    console.log("Hodnota nastavenia: ", off);
+    console.log("click", !click);
     db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
-      off: off,
+      off: !click,
     });
   };
 
@@ -59,6 +52,12 @@ function ValueSider(props) {
     setLightInt(newValue);
   };
 
+  const sendLight = (event, newValue) => {
+    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+      intensity: newValue,
+    });
+  };
+
   const handleDragStop = () => {
     console.log("Drag stop: ");
   };
@@ -72,7 +71,7 @@ function ValueSider(props) {
       event.preventDefault();
     }
   }
-  svetlo = light.intensity;
+  svetlo = light;
   return (
     <div className="containerLight">
       <Box sx={{ width: 300, height: 150 }}>
@@ -92,6 +91,7 @@ function ValueSider(props) {
           aria-label="Temperature"
           onKeyDown={preventHorizontalKeyboardNavigation}
           onChange={handleChange}
+          onChangeCommitted={sendLight}
           onDragEnd={handleDragStop}
         />
       </Box>

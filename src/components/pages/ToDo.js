@@ -28,6 +28,7 @@ function ToDo() {
       );
     });
   };
+  console.log("todos:", toDos);
 
   const addTodo = (e) => {
     e.preventDefault();
