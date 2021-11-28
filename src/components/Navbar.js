@@ -38,6 +38,15 @@ function Navbar() {
               ToDo
             </Link>
           </li>
+          <li className="nav-item">
+            <Link
+              to="/Settings"
+              className="nav-links"
+              onClick={closeMobileMenu}
+            >
+              Settings
+            </Link>
+          </li>
         </ul>
       </nav>
     </>

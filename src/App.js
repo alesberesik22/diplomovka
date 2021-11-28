@@ -23,6 +23,7 @@ import kitchen from "./components/pages/kitchen";
 import bathroom from "./components/pages/bathroom";
 import ToDo from "./components/pages/ToDo";
 import { db } from "./components/firebase_conf";
+import Settings from "./components/pages/Settings";
 
 var prach, teplota, vlhkost, intenzitaSvetla, zrazky, tlak;
 
@@ -109,6 +110,7 @@ function App() {
           <Route path="/kitchen" exact component={kitchen} />
           <Route path="/bathroom" exact component={bathroom} />
           <Route path="/ToDo" exact component={ToDo} />
+          <Route path="Settings" exact component={Settings} />
         </Switch>
       </AnimatePresence>
     </Router>

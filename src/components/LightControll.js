@@ -45,6 +45,9 @@ function LightControll(props) {
   };
   const getValue = (e, val) => {
     console.log(val);
+    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+      off: val,
+    });
   };
   farbaPom = '"' + farba + '"';
   console.log("Color:", farbaPom);
@@ -52,17 +55,19 @@ function LightControll(props) {
     <div className="container">
       <div className="switch-light">
         <Switch
-          checked={false}
+          checked={click}
           onChange={getValue}
           inputProps={{ "aria-label": "controlled" }}
         />
       </div>
       <div className="lightPicker">
-        <CircularColor
-          size={350}
-          onChange={handleColorChange}
-          color={farbaPom}
-        />
+        {farba ? (
+          <CircularColor
+            size={350}
+            onChange={handleColorChange}
+            color={farba}
+          />
+        ) : null}
       </div>
       <div className="valuePicker">
         <CircularSlider
