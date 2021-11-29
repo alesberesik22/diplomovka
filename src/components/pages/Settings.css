@@ -6,3 +6,39 @@
   align-items: center;
   position: absolute;
 }
+
+.containerLightSettings {
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
+  margin-left: 20vw;
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  height: 21vh;
+  width: 20vw;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+}
+.name {
+  position: absolute;
+  margin-left: 0vw;
+}
+.settings-on-off-icon {
+  display: block;
+  position: absolute;
+  margin-left: -17rem;
+  margin-top: -1.5rem;
+  transform: translate(-100%, 60%);
+  font-size: 2rem;
+  cursor: pointer;
+}
+.text-field {
+  margin-top: 2rem;
+  margin-left: -7rem;
+}
+.select-lights {
+  margin-left: -2rem;
+}

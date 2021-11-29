@@ -110,7 +110,7 @@ function App() {
           <Route path="/kitchen" exact component={kitchen} />
           <Route path="/bathroom" exact component={bathroom} />
           <Route path="/ToDo" exact component={ToDo} />
-          <Route path="Settings" exact component={Settings} />
+          <Route path="/Settings" exact component={Settings} />
         </Switch>
       </AnimatePresence>
     </Router>
