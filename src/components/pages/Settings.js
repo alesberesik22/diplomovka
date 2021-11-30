@@ -37,12 +37,19 @@ const names = ["Obyvacka", "Kupelna", "Kuchyna", "Izba", "Chodba"];
 
 export default function Settings() {
   const [click, setClick] = useState();
+  const [rainClick, setrainClick] = useState();
+  const [rainValue, setRainValue] = useState();
   const theme = useTheme();
   const [personName, setPersonName] = React.useState([]);
+  const [value, setValue] = useState();
 
   const handleClick = () => {
     console.log("click", !click);
     setClick(!click);
+  };
+  const handleClickRain = () => {
+    console.log("Rain click", !rainClick);
+    setrainClick(!rainClick);
   };
 
   const handleChange = (event) => {
@@ -53,56 +60,90 @@ export default function Settings() {
       // On autofill we get a the stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+    console.log("Value", value);
+  };
+
+  const lightIntensityChange = (event) => {
+    console.log("Event", event.target.value);
+    setValue(event.target.value);
+  };
+
+  const rainIntensityChange = (event) => {
+    console.log("Event", event.target.value);
+    setRainValue(event.target.value);
   };
 
   return (
-    <div className="containerLightSettings">
-      <div className="settings-on-off-icon" onClick={handleClick}>
-        <i className={click ? "fas fa-lightbulb" : "far fa-lightbulb"} />
+    <div>
+      <div className="containerLightSettings">
+        <div className="settings-on-off-icon" onClick={handleClick}>
+          <i className={click ? "fas fa-lightbulb" : "far fa-lightbulb"} />
+        </div>
+        <div className="text-field">
+          <Box>
+            <TextField
+              label={"light activation value"}
+              id="margin-normal"
+              margin="normal"
+              defaultValue={30}
+              required={true}
+              onChange={lightIntensityChange}
+            />
+          </Box>
+        </div>
+        <div className="select-lights">
+          <FormControl sx={{ m: 1, width: 300 }}>
+            <InputLabel id="demo-multiple-chip-label">Select lights</InputLabel>
+            <Select
+              labelId="demo-multiple-chip-label"
+              id="demo-multiple-chip"
+              multiple
+              value={personName}
+              onChange={handleChange}
+              input={
+                <OutlinedInput id="select-multiple-chip" label="Select light" />
+              }
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              {names.map((name) => (
+                <MenuItem
+                  key={name}
+                  value={name}
+                  style={getStyles(name, personName, theme)}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+        <h1 className="name">Svetla</h1>
       </div>
-      <div className="text-field">
-        <Box>
-          <TextField
-            label={"light activation value"}
-            id="margin-normal"
-            margin="normal"
-          />
-        </Box>
+      <div className="rain-controll-settings">
+        <div className="settings-rain-on-off-icon" onClick={handleClickRain}>
+          <i className={rainClick ? "fas fa-tint" : "fas fa-tint-slash"} />
+        </div>
+        <h1 className="rain-name">Dazd</h1>
+        <div className="rain-text-field">
+          <Box>
+            <TextField
+              label={"rain activation value"}
+              id="margin-normal"
+              margin="normal"
+              defaultValue={30}
+              required={true}
+              onChange={rainIntensityChange}
+            />
+          </Box>
+        </div>
       </div>
-      <div className="select-lights">
-        <FormControl sx={{ m: 1, width: 300 }}>
-          <InputLabel id="demo-multiple-chip-label">Select lights</InputLabel>
-          <Select
-            labelId="demo-multiple-chip-label"
-            id="demo-multiple-chip"
-            multiple
-            value={personName}
-            onChange={handleChange}
-            input={
-              <OutlinedInput id="select-multiple-chip" label="Select light" />
-            }
-            renderValue={(selected) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </Box>
-            )}
-            MenuProps={MenuProps}
-          >
-            {names.map((name) => (
-              <MenuItem
-                key={name}
-                value={name}
-                style={getStyles(name, personName, theme)}
-              >
-                {name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
-      <h1 className="name">Svetla</h1>
     </div>
   );
 }
