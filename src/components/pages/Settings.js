@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../App.css";
 import "./Settings.css";
 import { useState } from "react";
@@ -12,6 +12,8 @@ import Select from "@mui/material/Select";
 import Chip from "@mui/material/Chip";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
+import { db } from "../firebase_conf";
+import { Input } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -43,14 +45,48 @@ export default function Settings() {
   const [personName, setPersonName] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [value, setValue] = useState();
+  const [temperatureClick, setTemperatureClick] = useState();
+
+  const getAutomationLightInfo = () => {
+    db.collection("Automation")
+      .doc("nUgRm4cQUvxvuB4N9Jqi")
+      .onSnapshot((docSnapshot) => {
+        setClick(docSnapshot.data().on);
+        setPersonName(docSnapshot.data().rooms);
+        setValue(docSnapshot.data().activationValue);
+      });
+  };
+
+  const getAutomationRainAlarmInfo = () => {
+    db.collection("Automation")
+      .doc("rainAlarm")
+      .onSnapshot((docSnapshot) => {
+        setrainClick(docSnapshot.data().on);
+        setRooms(docSnapshot.data().rooms);
+      });
+  };
+  useEffect(() => {
+    getAutomationLightInfo();
+    getAutomationRainAlarmInfo();
+  }, []); //blank to run only on first launch
 
   const handleClick = () => {
     console.log("click", !click);
     setClick(!click);
+    db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+      on: !click,
+    });
   };
   const handleClickRain = () => {
     console.log("Rain click", !rainClick);
     setrainClick(!rainClick);
+    db.collection("Automation").doc("rainAlarm").update({
+      on: !rainClick,
+    });
+  };
+  const handleTemperatureIcon = () => {
+    console.log("Temperature click ", !temperatureClick);
+    setTemperatureClick(!temperatureClick);
   };
 
   const handleChange = (event) => {
@@ -62,6 +98,9 @@ export default function Settings() {
       typeof value === "string" ? value.split(",") : value
     );
     console.log("Value", value);
+    db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+      rooms: value,
+    });
   };
   const handleRainRooms = (event) => {
     const {
@@ -71,7 +110,9 @@ export default function Settings() {
       // On autofill we get a the stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log("Value", value);
+    db.collection("Automation").doc("rainAlarm").update({
+      rooms: value,
+    });
   };
 
   const lightIntensityChange = (event) => {
@@ -82,6 +123,12 @@ export default function Settings() {
   const rainIntensityChange = (event) => {
     console.log("Event", event.target.value);
     setRainValue(event.target.value);
+  };
+  const handleLowerTemperatureValue = (event) => {
+    console.log("Event ", event.target.value);
+  };
+  const handleHigherTemperatureValue = (event) => {
+    console.log("Event ", event.target.value);
   };
 
   return (
@@ -96,7 +143,7 @@ export default function Settings() {
               label={"light activation value"}
               id="margin-normal"
               margin="normal"
-              defaultValue={30}
+              defaultValue={value}
               required={true}
               onChange={lightIntensityChange}
             />
@@ -141,7 +188,7 @@ export default function Settings() {
         <div className="settings-rain-on-off-icon" onClick={handleClickRain}>
           <i className={rainClick ? "fas fa-tint" : "fas fa-tint-slash"} />
         </div>
-        <h1 className="rain-name">Rain alarm</h1>
+        <h1 className="name">Rain alarm</h1>
         <div className="rain-alarms">
           <div className="select-lights">
             <FormControl sx={{ m: 1, width: 300 }}>
@@ -181,6 +228,52 @@ export default function Settings() {
               </Select>
             </FormControl>
           </div>
+        </div>
+      </div>
+      <div className="temperature-controll-settings">
+        <div className="settings-on-off-icon" onClick={handleTemperatureIcon}>
+          <i
+            className={
+              temperatureClick
+                ? "fas fa-thermometer-full"
+                : "fas fa-thermometer-empty"
+            }
+          />
+        </div>
+        <h1 className="name">Temp alarm</h1>
+        <div classname="lower-temperature-input">
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1 },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Input
+              placeholder="Lower temperature"
+              type={"number"}
+              defaultValue={30}
+              onChange={handleLowerTemperatureValue}
+            />
+          </Box>
+        </div>
+        <div classname="high-temperature-input">
+          <Box
+            component="form"
+            sx={{
+              "& > :not(style)": { m: 1 },
+            }}
+            noValidate
+            autoComplete="off"
+          >
+            <Input
+              placeholder="High temperature"
+              type={"number"}
+              defaultValue={100}
+              onChange={handleHigherTemperatureValue}
+            />
+          </Box>
         </div>
       </div>
     </div>
