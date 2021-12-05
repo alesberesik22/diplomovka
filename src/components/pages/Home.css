@@ -35,7 +35,7 @@ gridContainer {
   margin-top: 0px;
   margin-left: 110px;
   /* left: 300px; */
-  width: 380px;
+  width: 23.75rem;
   height: 500px;
   /* background: white; */
   /* border-radius: 10px; */
@@ -52,4 +52,53 @@ gridContainer {
   margin-left: 530px;
   width: 300px;
   height: 150px;
+}
+.automation-list {
+  margin-top: 2rem;
+  margin-left: 33rem;
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 23.75rem;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+  list-style-type: none;
+}
+.automation-element {
+  margin-bottom: 1.5rem;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  height: 3rem;
+  width: 20rem;
+}
+.automation-element-toggle {
+  margin-left: 16rem;
+  margin-top: -3rem;
+}
+.notifications-card {
+  margin-top: -4rem;
+  margin-left: 7rem;
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 23.75rem;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+  list-style-type: none;
+}
+.notification-icon {
+  font-size: 1.4rem;
+  margin-left: -20rem;
+  margin-top: -1.5rem;
 }
