@@ -13,11 +13,14 @@ import { motion } from "framer-motion";
 import { ListItem, ListItemText } from "@mui/material";
 import UseAnimations from "react-useanimations";
 import toggle from "react-useanimations/lib/toggle";
+import lock from "react-useanimations/lib/lock";
 
 export const WeatherIcons = {};
 export default function Home() {
   const [checked, setChecked] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("");
+  const [name, setName] = useState("locked");
+  const [electricity, setElectricity] = useState(30);
   const homeAutomation = [
     {
       id: 1,
@@ -48,7 +51,7 @@ export default function Home() {
       style={{ backgroundColor: backgroundColor }}
     >
       <li>{settings.name}</li>
-      <div className="automation-element-toggle">
+      <div className="lock-element-toggle">
         <UseAnimations
           animation={toggle}
           size={56}
@@ -103,6 +106,26 @@ export default function Home() {
               <div className="notification-icon">
                 <i class="far fa-bell"></i>
               </div>
+            </div>
+            <div className="door-check-card">
+              <h1 style={{ fontSize: "1.4rem" }}>Home door check</h1>
+              <div className="door-status">Status of the door: </div>
+              <div className="automation-element-toggle">
+                <UseAnimations
+                  animation={lock}
+                  size={40}
+                  style={{ padding: 100 }}
+                />
+              </div>
+              <div className="diplay-lock-value">{name}</div>
+            </div>
+            <div className="electricity-card">
+              <h1 style={{ fontSize: "1.4rem" }}>Living room electricity</h1>
+              <div className="electricity-logo">
+                <i class="fas fa-bolt"></i>
+              </div>
+              <div className="electricity-status">Electricity usage: </div>
+              <div className="diplay-electricity-value">{electricity}</div>
             </div>
           </div>
           <MdChevronRight

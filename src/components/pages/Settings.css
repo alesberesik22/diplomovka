@@ -101,3 +101,19 @@
 .css-1b0ve20 {
   margin-top: 2.3rem;
 }
+.wind-alarm {
+  display: flex;
+  flex-direction: column;
+  margin-top: -43.8rem;
+  /* margin: auto; */
+  margin-left: 45vw;
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  height: 21vh;
+  width: 20vw;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+}

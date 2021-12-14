@@ -102,3 +102,66 @@ gridContainer {
   margin-left: -20rem;
   margin-top: -1.5rem;
 }
+.door-check-card {
+  margin-top: -36rem;
+  margin-left: 53.1rem;
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 23.75rem;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+  list-style-type: none;
+}
+.door-status {
+  margin-top: 1rem;
+  margin-left: -12rem;
+  margin-bottom: 1rem;
+}
+.lock-element-toggle {
+  pointer-events: none;
+}
+.diplay-lock-value {
+  margin-top: -1.7rem;
+  margin-left: 3rem;
+  font-weight: bold;
+  color: #1888ff;
+}
+.electricity-card {
+  margin-top: 1.5rem;
+  margin-left: 58rem;
+  display: flex;
+  flex-direction: column;
+  /* margin: auto; */
+  align-items: center;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 19rem;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+  list-style-type: none;
+}
+.electricity-status {
+  margin-top: 1rem;
+  margin-left: -8rem;
+  margin-bottom: 1rem;
+}
+.electricity-logo {
+  position: absolute;
+  margin-left: 12rem;
+  margin-top: 2.8rem;
+}
+.diplay-electricity-value {
+  position: absolute;
+  margin-top: 2.8rem;
+  margin-left: 5rem;
+  font-weight: bold;
+  color: #1888ff;
+}

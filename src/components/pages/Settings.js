@@ -46,6 +46,7 @@ export default function Settings() {
   const [rooms, setRooms] = useState([]);
   const [value, setValue] = useState();
   const [temperatureClick, setTemperatureClick] = useState();
+  const [windValue, setWindValue] = useState();
 
   const getAutomationLightInfo = () => {
     db.collection("Automation")
@@ -129,6 +130,9 @@ export default function Settings() {
   };
   const handleHigherTemperatureValue = (event) => {
     console.log("Event ", event.target.value);
+  };
+  const windValueChange = (event) => {
+    console.log("Event: ", event.target.value);
   };
 
   return (
@@ -272,6 +276,21 @@ export default function Settings() {
               type={"number"}
               defaultValue={100}
               onChange={handleHigherTemperatureValue}
+            />
+          </Box>
+        </div>
+      </div>
+      <div className="wind-alarm">
+        <h1 className="name">Wind alarm</h1>
+        <div className="text-field">
+          <Box>
+            <TextField
+              label={"wind activation value"}
+              id="margin-normal"
+              margin="normal"
+              defaultValue={windValue}
+              required={true}
+              onChange={windValueChange}
             />
           </Box>
         </div>
