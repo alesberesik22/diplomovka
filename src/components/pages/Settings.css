@@ -117,3 +117,14 @@
   font-family: "Montserrat", sans-serif;
   flex-shrink: 0;
 }
+.automation-list-element {
+  margin-top: 0.5rem;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  width: 19.7vw;
+  height: 7vh;
+}
+.css-1d3f8j8-MuiButtonBase-root-MuiButton-root {
+  margin-left: 100px;
+}

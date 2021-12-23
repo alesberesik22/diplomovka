@@ -11,6 +11,7 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 import { motion } from "framer-motion";
 import { ListItem, ListItemText } from "@mui/material";
+import Button from "@mui/material/Button";
 import UseAnimations from "react-useanimations";
 import toggle from "react-useanimations/lib/toggle";
 import lock from "react-useanimations/lib/lock";
@@ -18,49 +19,45 @@ import lock from "react-useanimations/lib/lock";
 export const WeatherIcons = {};
 export default function Home() {
   const [checked, setChecked] = useState(false);
+  const [checked2, setChecked2] = useState(false);
+  const [checked3, setChecked3] = useState(false);
+  const [checked4, setChecked4] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("");
+  const [backgroundColor2, setBackgroundColor2] = useState("");
+  const [backgroundColor3, setBackgroundColor3] = useState("");
+  const [backgroundColor4, setBackgroundColor4] = useState("");
   const [name, setName] = useState("locked");
   const [electricity, setElectricity] = useState(30);
-  const homeAutomation = [
-    {
-      id: 1,
-      name: "Auto lights",
-    },
-    {
-      id: 2,
-      name: "Rain alarm",
-    },
-    {
-      id: 3,
-      name: "Temperature alarm",
-    },
-    {
-      id: 4,
-      name: "Wind alarm",
-    },
-  ];
-  const handleChecked = (event) => {
-    console.log("Checked: ", !checked);
-    console.log("ID ", event.target.id);
-    setChecked(!checked);
-    checked ? setBackgroundColor("#1888ff") : setBackgroundColor("");
+
+  const handleChecked = (event) => {};
+
+  const handleClick = (event) => {
+    if (event.target.id == "B1") {
+      console.log("ID ", event.target.id);
+      console.log("Checked: ", !checked);
+      setChecked(!checked);
+      checked ? setBackgroundColor("") : setBackgroundColor("#1888ff");
+    }
+    if (event.target.id == "B2") {
+      console.log("Checked2: ", !checked2);
+      console.log("ID ", event.target.id);
+      setChecked2(!checked2);
+      checked2 ? setBackgroundColor2("") : setBackgroundColor2("#1888ff");
+    }
+    if (event.target.id == "B3") {
+      console.log("Checked3: ", !checked3);
+      console.log("ID ", event.target.id);
+      setChecked3(!checked3);
+      checked3 ? setBackgroundColor3("") : setBackgroundColor3("#1888ff");
+    }
+    if (event.target.id == "B4") {
+      console.log("Checked4: ", !checked4);
+      console.log("ID ", event.target.id);
+      setChecked4(!checked4);
+      checked4 ? setBackgroundColor4("") : setBackgroundColor4("#1888ff");
+    }
   };
-  const homeAutomationList = homeAutomation.map((settings) => (
-    <div
-      className="automation-element"
-      style={{ backgroundColor: backgroundColor }}
-    >
-      <li>{settings.name}</li>
-      <div className="lock-element-toggle">
-        <UseAnimations
-          animation={toggle}
-          size={56}
-          onClick={handleChecked}
-          reverse={checked}
-        />
-      </div>
-    </div>
-  ));
+
   document.body.classList.add("no-sroll");
 
   const slideLeft = () => {
@@ -96,9 +93,42 @@ export default function Home() {
             <div className="automation-list">
               <h1>Automation list</h1>
               <div className="automation-element-text">
-                <ListItem>
-                  <ListItemText primary={homeAutomationList} />
-                </ListItem>
+                <div
+                  className="automation-list-element"
+                  style={{ backgroundColor: backgroundColor }}
+                >
+                  Auto lights
+                  <Button id="B1" color="secondary" onClick={handleClick}>
+                    {checked ? "ON" : "OFF"}
+                  </Button>
+                </div>
+                <div
+                  className="automation-list-element"
+                  style={{ backgroundColor: backgroundColor2 }}
+                >
+                  Rain alarm
+                  <Button id="B2" color="secondary" onClick={handleClick}>
+                    {checked2 ? "ON" : "OFF"}
+                  </Button>
+                </div>
+                <div
+                  className="automation-list-element"
+                  style={{ backgroundColor: backgroundColor3 }}
+                >
+                  Temperature alarm
+                  <Button id="B3" color="secondary" onClick={handleClick}>
+                    {checked3 ? "ON" : "OFF"}
+                  </Button>
+                </div>
+                <div
+                  className="automation-list-element"
+                  style={{ backgroundColor: backgroundColor4 }}
+                >
+                  Wind alarm
+                  <Button id="B4" color="secondary" onClick={handleClick}>
+                    {checked4 ? "ON" : "OFF"}
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="notifications-card">
