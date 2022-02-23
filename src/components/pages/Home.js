@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import "../../App.css";
 import "../CardSlider.css";
@@ -16,18 +16,61 @@ import UseAnimations from "react-useanimations";
 import toggle from "react-useanimations/lib/toggle";
 import lock from "react-useanimations/lib/lock";
 
+import { db } from "../firebase_conf";
+
 export const WeatherIcons = {};
 export default function Home() {
-  const [checked, setChecked] = useState(false);
-  const [checked2, setChecked2] = useState(false);
-  const [checked3, setChecked3] = useState(false);
-  const [checked4, setChecked4] = useState(false);
+  const [checked, setChecked] = useState([]);
+  const [visibleRainAlarm, setVisibleRainAlarm] = useState(true);
+  const [visibleTemperatureAlarm, setVisibleTemperatureAlarm] = useState(true);
+  const [visibleWindAlarm, setVisibleWindAlarm] = useState(true);
+  const [visibleLightAlarm, setVisibleLightAlarm] = useState(true);
+  const [checked2, setChecked2] = useState([]);
+  const [checked3, setChecked3] = useState([]);
+  const [checked4, setChecked4] = useState([]);
   const [backgroundColor, setBackgroundColor] = useState("");
   const [backgroundColor2, setBackgroundColor2] = useState("");
   const [backgroundColor3, setBackgroundColor3] = useState("");
   const [backgroundColor4, setBackgroundColor4] = useState("");
   const [name, setName] = useState("locked");
   const [electricity, setElectricity] = useState(30);
+  const [doorLock, setDoorLock] = useState([]);
+
+  useEffect(() => {
+    getDoorInfo();
+    getAutomationInfo();
+  }, []); //blank to run only on first launch
+
+  const getDoorInfo = () => {
+    db.collection("Devices")
+      .doc("door-lock")
+      .onSnapshot((docSnapshot) => {
+        setDoorLock(docSnapshot.data().locked);
+      });
+  };
+
+  const getAutomationInfo = () => {
+    db.collection("Automation")
+      .doc("nUgRm4cQUvxvuB4N9Jqi")
+      .onSnapshot((docSnapshot) => {
+        setChecked(docSnapshot.data().on);
+      });
+    db.collection("Automation")
+      .doc("rainAlarm")
+      .onSnapshot((docSnapshot) => {
+        setChecked2(docSnapshot.data().on);
+      });
+    db.collection("Automation")
+      .doc("temperatureAlarm")
+      .onSnapshot((docSnapshot) => {
+        setChecked3(docSnapshot.data().on);
+      });
+    db.collection("Automation")
+      .doc("windAlarm")
+      .onSnapshot((docSnapshot) => {
+        setChecked4(docSnapshot.data().on);
+      });
+  };
 
   const handleChecked = (event) => {};
 
@@ -35,24 +78,36 @@ export default function Home() {
     if (event.target.id == "B1") {
       console.log("ID ", event.target.id);
       console.log("Checked: ", !checked);
+      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+        on: !checked,
+      });
       setChecked(!checked);
       checked ? setBackgroundColor("") : setBackgroundColor("#1888ff");
     }
     if (event.target.id == "B2") {
       console.log("Checked2: ", !checked2);
       console.log("ID ", event.target.id);
+      db.collection("Automation").doc("rainAlarm").update({
+        on: !checked2,
+      });
       setChecked2(!checked2);
       checked2 ? setBackgroundColor2("") : setBackgroundColor2("#1888ff");
     }
     if (event.target.id == "B3") {
       console.log("Checked3: ", !checked3);
       console.log("ID ", event.target.id);
+      db.collection("Automation").doc("temperatureAlarm").update({
+        on: !checked3,
+      });
       setChecked3(!checked3);
       checked3 ? setBackgroundColor3("") : setBackgroundColor3("#1888ff");
     }
     if (event.target.id == "B4") {
       console.log("Checked4: ", !checked4);
       console.log("ID ", event.target.id);
+      db.collection("Automation").doc("windAlarm").update({
+        on: !checked4,
+      });
       setChecked4(!checked4);
       checked4 ? setBackgroundColor4("") : setBackgroundColor4("#1888ff");
     }
@@ -136,6 +191,38 @@ export default function Home() {
               <div className="notification-icon">
                 <i class="far fa-bell"></i>
               </div>
+              {visibleRainAlarm && (
+                <div className="rain-notification">
+                  Rain alarm
+                  <Button id="B8" color="secondary" onClick={handleClick}>
+                    {checked ? "ON" : "OFF"}
+                  </Button>
+                </div>
+              )}
+              {visibleTemperatureAlarm && (
+                <div className="temperature-notification">
+                  Temperature alarm
+                  <Button id="B9" color="secondary" onClick={handleClick}>
+                    {checked ? "ON" : "OFF"}
+                  </Button>
+                </div>
+              )}
+              {visibleWindAlarm && (
+                <div className="wind-notification">
+                  Wind alarm
+                  <Button id="B7" color="secondary" onClick={handleClick}>
+                    {checked ? "ON" : "OFF"}
+                  </Button>
+                </div>
+              )}
+              {visibleLightAlarm && (
+                <div className="light-notification">
+                  Light alarm
+                  <Button id="B1" color="secondary" onClick={handleClick}>
+                    {checked ? "ON" : "OFF"}
+                  </Button>
+                </div>
+              )}
             </div>
             <div className="door-check-card">
               <h1 style={{ fontSize: "1.4rem" }}>Home door check</h1>
@@ -147,7 +234,9 @@ export default function Home() {
                   style={{ padding: 100 }}
                 />
               </div>
-              <div className="diplay-lock-value">{name}</div>
+              <div className="diplay-lock-value">
+                {doorLock ? "locked" : "unlocked"}
+              </div>
             </div>
             <div className="electricity-card">
               <h1 style={{ fontSize: "1.4rem" }}>Living room electricity</h1>

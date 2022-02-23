@@ -45,7 +45,9 @@ export default function Settings() {
   const [personName, setPersonName] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [value, setValue] = useState();
-  const [temperatureClick, setTemperatureClick] = useState();
+  const [temperatureClick, setTemperatureClick] = useState([]);
+  const [lowerTemperature, setLowerTemperature] = useState([]);
+  const [highTemperature, setHighTemperature] = useState([]);
   const [windValue, setWindValue] = useState();
 
   const getAutomationLightInfo = () => {
@@ -66,9 +68,30 @@ export default function Settings() {
         setRooms(docSnapshot.data().rooms);
       });
   };
+
+  const getAutomationTemperatureAlarmInfo = () => {
+    db.collection("Automation")
+      .doc("temperatureAlarm")
+      .onSnapshot((docSnapshot) => {
+        setTemperatureClick(docSnapshot.data().on);
+        setLowerTemperature(docSnapshot.data().lowerValue);
+        setHighTemperature(docSnapshot.data().upperValue);
+      });
+  };
+
+  const getAutomationWindAlarmInfo = () => {
+    db.collection("Automation")
+      .doc("windAlarm")
+      .onSnapshot((docSnapshot) => {
+        setWindValue(docSnapshot.data().activationValue);
+      });
+  };
+
   useEffect(() => {
     getAutomationLightInfo();
     getAutomationRainAlarmInfo();
+    getAutomationTemperatureAlarmInfo();
+    getAutomationWindAlarmInfo();
   }, []); //blank to run only on first launch
 
   const handleClick = () => {
@@ -87,6 +110,9 @@ export default function Settings() {
   };
   const handleTemperatureIcon = () => {
     console.log("Temperature click ", !temperatureClick);
+    db.collection("Automation").doc("temperatureAlarm").update({
+      on: !temperatureClick,
+    });
     setTemperatureClick(!temperatureClick);
   };
 
@@ -119,6 +145,9 @@ export default function Settings() {
   const lightIntensityChange = (event) => {
     console.log("Event", event.target.value);
     setValue(event.target.value);
+    db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+      activationValue: event.target.value,
+    });
   };
 
   const rainIntensityChange = (event) => {
@@ -127,12 +156,21 @@ export default function Settings() {
   };
   const handleLowerTemperatureValue = (event) => {
     console.log("Event ", event.target.value);
+    db.collection("Automation").doc("temperatureAlarm").update({
+      lowerValue: event.target.value,
+    });
   };
   const handleHigherTemperatureValue = (event) => {
     console.log("Event ", event.target.value);
+    db.collection("Automation").doc("temperatureAlarm").update({
+      upperValue: event.target.value,
+    });
   };
   const windValueChange = (event) => {
     console.log("Event: ", event.target.value);
+    db.collection("Automation").doc("windAlarm").update({
+      activationValue: event.target.value,
+    });
   };
 
   return (
@@ -147,7 +185,7 @@ export default function Settings() {
               label={"light activation value"}
               id="margin-normal"
               margin="normal"
-              defaultValue={value}
+              value={parseInt(value)}
               required={true}
               onChange={lightIntensityChange}
             />
@@ -257,7 +295,7 @@ export default function Settings() {
             <Input
               placeholder="Lower temperature"
               type={"number"}
-              defaultValue={30}
+              value={parseInt(lowerTemperature)}
               onChange={handleLowerTemperatureValue}
             />
           </Box>
@@ -274,7 +312,7 @@ export default function Settings() {
             <Input
               placeholder="High temperature"
               type={"number"}
-              defaultValue={100}
+              value={parseInt(highTemperature)}
               onChange={handleHigherTemperatureValue}
             />
           </Box>
@@ -288,7 +326,7 @@ export default function Settings() {
               label={"wind activation value"}
               id="margin-normal"
               margin="normal"
-              defaultValue={windValue}
+              value={parseInt(windValue)}
               required={true}
               onChange={windValueChange}
             />

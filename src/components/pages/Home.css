@@ -103,7 +103,7 @@ gridContainer {
   margin-top: -1.5rem;
 }
 .door-check-card {
-  margin-top: -36rem;
+  margin-top: -56.1rem;
   margin-left: 53.1rem;
   display: flex;
   flex-direction: column;
@@ -164,4 +164,16 @@ gridContainer {
   margin-left: 5rem;
   font-weight: bold;
   color: #1888ff;
+}
+
+.rain-notification,
+.temperature-notification,
+.wind-notification,
+.light-notification {
+  margin-top: 1.5rem;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  border-radius: 10px;
+  height: 3.5rem;
+  width: 100%;
 }
