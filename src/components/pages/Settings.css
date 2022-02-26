@@ -8,10 +8,12 @@
 }
 
 .containerLightSettings {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
   /* margin: auto; */
-  margin-left: 20vw;
+  top: -6rem;
+  left: 20vw;
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -43,11 +45,12 @@
   margin-left: -2rem;
 }
 .rain-controll-settings {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
-  margin-top: 2rem;
+  top: 9rem;
   /* margin: auto; */
-  margin-left: 20vw;
+  /* left: 20vw; */
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -83,11 +86,12 @@
   margin-top: 2rem;
 }
 .temperature-controll-settings {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
-  margin-top: 2rem;
+  top: 25rem;
   /* margin: auto; */
-  margin-left: 20vw;
+  left: -20vw;
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -102,11 +106,12 @@
   margin-top: 2.3rem;
 }
 .wind-alarm {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   flex-direction: column;
-  margin-top: -43.8rem;
+  top: -6rem;
   /* margin: auto; */
-  margin-left: 45vw;
+  left: -18vw;
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -124,6 +129,22 @@
   border-radius: 10px;
   width: 19.7vw;
   height: 7vh;
+}
+.relay {
+  position: relative;
+  display: inline-flex;
+  top: 18rem;
+  left: -38vw;
+  flex-direction: column;
+  box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  width: 20vw;
+  height: 21vh;
+  border-radius: 10px;
+  background: white;
+  font-family: "Montserrat", sans-serif;
+  flex-shrink: 0;
+  align-items: center;
 }
 .css-1d3f8j8-MuiButtonBase-root-MuiButton-root {
   margin-left: 100px;

@@ -36,6 +36,15 @@ function getStyles(name, personName, theme) {
 }
 
 const names = ["Obyvacka", "Kupelna", "Kuchyna", "Izba", "Chodba"];
+const weekdays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export default function Settings() {
   const [click, setClick] = useState();
@@ -174,7 +183,7 @@ export default function Settings() {
   };
 
   return (
-    <div>
+    <div classname="table">
       <div className="containerLightSettings">
         <div className="settings-on-off-icon" onClick={handleClick}>
           <i className={click ? "fas fa-lightbulb" : "far fa-lightbulb"} />
@@ -332,6 +341,9 @@ export default function Settings() {
             />
           </Box>
         </div>
+      </div>
+      <div className="relay">
+        <h1 className="name">Power on/off</h1>
       </div>
     </div>
   );

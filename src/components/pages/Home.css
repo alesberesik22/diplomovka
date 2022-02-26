@@ -82,8 +82,9 @@ gridContainer {
   margin-top: -3rem;
 }
 .notifications-card {
-  margin-top: -4rem;
-  margin-left: 7rem;
+  position: relative;
+  top: -4rem;
+  left: 7rem;
   display: flex;
   flex-direction: column;
   /* margin: auto; */
@@ -91,7 +92,7 @@ gridContainer {
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
   border-radius: 10px;
-  width: 23.75rem;
+  width: 23rem;
   background: white;
   font-family: "Montserrat", sans-serif;
   flex-shrink: 0;
@@ -103,8 +104,9 @@ gridContainer {
   margin-top: -1.5rem;
 }
 .door-check-card {
-  margin-top: -56.1rem;
-  margin-left: 53.1rem;
+  position: relative;
+  top: -56.1rem;
+  left: 53.1rem;
   display: flex;
   flex-direction: column;
   /* margin: auto; */
@@ -133,8 +135,9 @@ gridContainer {
   color: #1888ff;
 }
 .electricity-card {
-  margin-top: 1.5rem;
-  margin-left: 58rem;
+  position: relative;
+  top: -55.5rem;
+  left: 58rem;
   display: flex;
   flex-direction: column;
   /* margin: auto; */
