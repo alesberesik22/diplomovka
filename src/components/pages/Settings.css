@@ -12,7 +12,7 @@
   display: inline-flex;
   flex-direction: column;
   /* margin: auto; */
-  top: -6rem;
+  top: 0rem;
   left: 20vw;
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@
 }
 .text-field {
   margin-top: 2rem;
-  margin-left: -7rem;
+  /* margin-left: -7rem; */
 }
 .select-lights {
   margin-left: -2rem;
@@ -48,7 +48,7 @@
   position: relative;
   display: inline-flex;
   flex-direction: column;
-  top: 9rem;
+  top: 15rem;
   /* margin: auto; */
   /* left: 20vw; */
   align-items: center;
@@ -89,7 +89,7 @@
   position: relative;
   display: inline-flex;
   flex-direction: column;
-  top: 25rem;
+  top: 31rem;
   /* margin: auto; */
   left: -20vw;
   align-items: center;
@@ -109,7 +109,7 @@
   position: relative;
   display: inline-flex;
   flex-direction: column;
-  top: -6rem;
+  /* top: -6rem; */
   /* margin: auto; */
   left: -18vw;
   align-items: center;
@@ -133,18 +133,21 @@
 .relay {
   position: relative;
   display: inline-flex;
-  top: 18rem;
+  top: 16rem;
   left: -38vw;
   flex-direction: column;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
   width: 20vw;
-  height: 21vh;
+  height: 26vh;
   border-radius: 10px;
   background: white;
   font-family: "Montserrat", sans-serif;
   flex-shrink: 0;
   align-items: center;
+}
+.time-picker {
+  margin-top: 50px;
 }
 .css-1d3f8j8-MuiButtonBase-root-MuiButton-root {
   margin-left: 100px;

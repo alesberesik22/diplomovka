@@ -14,6 +14,9 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import MenuItem from "@mui/material/MenuItem";
 import { db } from "../firebase_conf";
 import { Input } from "@mui/material";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import TimePicker from "@mui/lab/TimePicker";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -36,15 +39,7 @@ function getStyles(name, personName, theme) {
 }
 
 const names = ["Obyvacka", "Kupelna", "Kuchyna", "Izba", "Chodba"];
-const weekdays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export default function Settings() {
   const [click, setClick] = useState();
@@ -53,7 +48,11 @@ export default function Settings() {
   const theme = useTheme();
   const [personName, setPersonName] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [weekday, setWeekday] = useState([]);
   const [value, setValue] = useState();
+  const [lowerTime, setLowerTime] = useState();
+  const [upperTime, setUpperTime] = useState();
+  const [weekdayValue, setWeekdayValue] = useState();
   const [temperatureClick, setTemperatureClick] = useState([]);
   const [lowerTemperature, setLowerTemperature] = useState([]);
   const [highTemperature, setHighTemperature] = useState([]);
@@ -96,11 +95,21 @@ export default function Settings() {
       });
   };
 
+  const getRelayInfo = () => {
+    db.collection("Automation")
+      .doc("relay")
+      .onSnapshot((docSnapshot) => {
+        setWeekday(docSnapshot.data().weekdays);
+        setLowerTime(docSnapshot.data().lowerTime);
+      });
+  };
+
   useEffect(() => {
     getAutomationLightInfo();
     getAutomationRainAlarmInfo();
     getAutomationTemperatureAlarmInfo();
     getAutomationWindAlarmInfo();
+    getRelayInfo();
   }, []); //blank to run only on first launch
 
   const handleClick = () => {
@@ -110,6 +119,16 @@ export default function Settings() {
       on: !click,
     });
   };
+
+  const handleLowerTime = (newValue) => {
+    var splitTime = String(newValue).split(/(\s+)/);
+    console.log(splitTime[8]);
+    setLowerTime(newValue);
+    db.collection("Automation").doc("relay").update({
+      lowerTime: splitTime[8],
+    });
+  };
+
   const handleClickRain = () => {
     console.log("Rain click", !rainClick);
     setrainClick(!rainClick);
@@ -148,6 +167,19 @@ export default function Settings() {
     );
     db.collection("Automation").doc("rainAlarm").update({
       rooms: value,
+    });
+  };
+
+  const handleWeekdays = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setWeekday(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    db.collection("Automation").doc("relay").update({
+      weekdays: value,
     });
   };
 
@@ -201,7 +233,7 @@ export default function Settings() {
           </Box>
         </div>
         <div className="select-lights">
-          <FormControl sx={{ m: 1, width: 300 }}>
+          <FormControl sx={{ m: 1, minWidth: 255 }}>
             <InputLabel id="demo-multiple-chip-label">Select lights</InputLabel>
             <Select
               labelId="demo-multiple-chip-label"
@@ -242,7 +274,7 @@ export default function Settings() {
         <h1 className="name">Rain alarm</h1>
         <div className="rain-alarms">
           <div className="select-lights">
-            <FormControl sx={{ m: 1, width: 300 }}>
+            <FormControl sx={{ m: 1, minWidth: 255 }}>
               <InputLabel id="rain-selector-label">
                 Select lights to alarm
               </InputLabel>
@@ -344,6 +376,52 @@ export default function Settings() {
       </div>
       <div className="relay">
         <h1 className="name">Power on/off</h1>
+        <div className="time-picker">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              label="Select lower value"
+              value={lowerTime}
+              onChange={handleLowerTime}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </div>
+        <div className="choose-weekdays">
+          <FormControl sx={{ m: 1, minWidth: 255 }}>
+            <InputLabel id="weekday-selector-label">Select weekdays</InputLabel>
+            <Select
+              labelId="weekday-selector-label"
+              id="weekday-selector"
+              multiple
+              value={weekday}
+              onChange={handleWeekdays}
+              input={
+                <OutlinedInput
+                  id="select-multiple-days"
+                  label="Select weekdays"
+                />
+              }
+              renderValue={(selected) => (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              {weekdays.map((name) => (
+                <MenuItem
+                  key={name}
+                  value={name}
+                  style={getStyles(name, weekday, theme)}
+                >
+                  {name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
       </div>
     </div>
   );
