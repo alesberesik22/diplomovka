@@ -52,6 +52,7 @@ export default function Settings() {
   const [value, setValue] = useState();
   const [lowerTime, setLowerTime] = useState();
   const [upperTime, setUpperTime] = useState();
+  const [electricity, setElectricity] = useState();
   const [weekdayValue, setWeekdayValue] = useState();
   const [temperatureClick, setTemperatureClick] = useState([]);
   const [lowerTemperature, setLowerTemperature] = useState([]);
@@ -100,7 +101,8 @@ export default function Settings() {
       .doc("relay")
       .onSnapshot((docSnapshot) => {
         setWeekday(docSnapshot.data().weekdays);
-        setLowerTime(docSnapshot.data().lowerTime);
+        setLowerTime(docSnapshot.data().fullLowerTime);
+        setUpperTime(docSnapshot.data().fullUpperTime);
       });
   };
 
@@ -120,12 +122,29 @@ export default function Settings() {
     });
   };
 
+  const handleClickElectricity = () => {
+    setElectricity(!electricity);
+    db.collection("Automation").doc("relay").update({
+      on: !electricity,
+    });
+  };
+
   const handleLowerTime = (newValue) => {
+    setLowerTime(newValue);
     var splitTime = String(newValue).split(/(\s+)/);
     console.log(splitTime[8]);
-    setLowerTime(newValue);
     db.collection("Automation").doc("relay").update({
       lowerTime: splitTime[8],
+      fullLowerTime: newValue,
+    });
+  };
+
+  const handleUpperTime = (newValue) => {
+    setUpperTime(newValue);
+    var splitTime = String(newValue).split(/(\s+)/);
+    db.collection("Automation").doc("relay").update({
+      upperTime: splitTime[8],
+      fullUpperTime: newValue,
     });
   };
 
@@ -376,12 +395,29 @@ export default function Settings() {
       </div>
       <div className="relay">
         <h1 className="name">Power on/off</h1>
+        <div className="settings-on-off-icon" onClick={handleClickElectricity}>
+          <i
+            className={
+              electricity ? "fas fa-solid fa-bolt" : "fas fa-thin fa-bolt"
+            }
+          />
+        </div>
         <div className="time-picker">
           <LocalizationProvider dateAdapter={AdapterDateFns}>
             <TimePicker
-              label="Select lower value"
+              label="Select lower time"
               value={lowerTime}
               onChange={handleLowerTime}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+        </div>
+        <div className="upper-time-picker">
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <TimePicker
+              label="Select upper time"
+              value={upperTime}
+              onChange={handleUpperTime}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>

@@ -139,7 +139,7 @@
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
   width: 20vw;
-  height: 26vh;
+  minheight: 28vh;
   border-radius: 10px;
   background: white;
   font-family: "Montserrat", sans-serif;
@@ -149,6 +149,11 @@
 .time-picker {
   margin-top: 50px;
 }
+
+.upper-time-picker {
+  margin-top: 10px;
+}
+
 .css-1d3f8j8-MuiButtonBase-root-MuiButton-root {
   margin-left: 100px;
 }
