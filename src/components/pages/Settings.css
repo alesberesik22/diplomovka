@@ -7,6 +7,13 @@
   position: absolute;
 }
 
+.table {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .containerLightSettings {
   position: relative;
   display: inline-flex;
@@ -130,10 +137,16 @@
   width: 19.7vw;
   height: 7vh;
 }
+.automation-on-off {
+  position: relative;
+  font-size: medium;
+  top: 3.5rem;
+  left: -100px;
+}
 .relay {
   position: relative;
   display: inline-flex;
-  top: 16rem;
+  top: 13rem;
   left: -38vw;
   flex-direction: column;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
@@ -146,6 +159,7 @@
   flex-shrink: 0;
   align-items: center;
 }
+
 .time-picker {
   margin-top: 50px;
 }

@@ -17,6 +17,8 @@ import { Input } from "@mui/material";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TimePicker from "@mui/lab/TimePicker";
+import Switch from "@mui/material/Switch";
+import { styled } from "@mui/material/styles";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -54,10 +56,67 @@ export default function Settings() {
   const [upperTime, setUpperTime] = useState();
   const [electricity, setElectricity] = useState();
   const [weekdayValue, setWeekdayValue] = useState();
+  const [plugAutomation, setPlugAutomation] = useState();
   const [temperatureClick, setTemperatureClick] = useState([]);
   const [lowerTemperature, setLowerTemperature] = useState([]);
   const [highTemperature, setHighTemperature] = useState([]);
   const [windValue, setWindValue] = useState();
+
+  const IOSSwitch = styled((props) => (
+    <Switch
+      focusVisibleClassName=".Mui-focusVisible"
+      disableRipple
+      {...props}
+    />
+  ))(({ theme }) => ({
+    width: 42,
+    height: 26,
+    padding: 0,
+    "& .MuiSwitch-switchBase": {
+      padding: 0,
+      margin: 2,
+      transitionDuration: "300ms",
+      "&.Mui-checked": {
+        transform: "translateX(16px)",
+        color: "#fff",
+        "& + .MuiSwitch-track": {
+          backgroundColor:
+            theme.palette.mode === "dark" ? "##1888ff" : "##1888ff",
+          opacity: 1,
+          border: 0,
+        },
+        "&.Mui-disabled + .MuiSwitch-track": {
+          opacity: 0.5,
+        },
+      },
+      "&.Mui-focusVisible .MuiSwitch-thumb": {
+        color: "##1888ff",
+        border: "6px solid #fff",
+      },
+      "&.Mui-disabled .MuiSwitch-thumb": {
+        color:
+          theme.palette.mode === "light"
+            ? theme.palette.grey[100]
+            : theme.palette.grey[600],
+      },
+      "&.Mui-disabled + .MuiSwitch-track": {
+        opacity: theme.palette.mode === "light" ? 0.7 : 0.3,
+      },
+    },
+    "& .MuiSwitch-thumb": {
+      boxSizing: "border-box",
+      width: 22,
+      height: 22,
+    },
+    "& .MuiSwitch-track": {
+      borderRadius: 26 / 2,
+      backgroundColor: theme.palette.mode === "light" ? "#E9E9EA" : "#39393D",
+      opacity: 1,
+      transition: theme.transitions.create(["background-color"], {
+        duration: 500,
+      }),
+    },
+  }));
 
   const getAutomationLightInfo = () => {
     db.collection("Automation")
@@ -103,6 +162,7 @@ export default function Settings() {
         setWeekday(docSnapshot.data().weekdays);
         setLowerTime(docSnapshot.data().fullLowerTime);
         setUpperTime(docSnapshot.data().fullUpperTime);
+        setPlugAutomation(docSnapshot.data().automation);
       });
   };
 
@@ -119,6 +179,14 @@ export default function Settings() {
     setClick(!click);
     db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
       on: !click,
+    });
+  };
+
+  const handleSmartPlugAutomation = () => {
+    console.log("plugAutomation", !plugAutomation);
+    setPlugAutomation(!plugAutomation);
+    db.collection("Automation").doc("relay").update({
+      automation: !plugAutomation,
     });
   };
 
@@ -394,7 +462,15 @@ export default function Settings() {
         </div>
       </div>
       <div className="relay">
-        <h1 className="name">Power on/off</h1>
+        <h1 className="name">Smart plug</h1>
+        <h2 className="automation-on-off">Automation</h2>
+        <div className="smart-plug-switch">
+          <IOSSwitch
+            sx={{ m: 1, left: 100, top: 20 }}
+            value={plugAutomation}
+            onChange={handleSmartPlugAutomation}
+          />
+        </div>
         <div className="settings-on-off-icon" onClick={handleClickElectricity}>
           <i
             className={
@@ -408,6 +484,7 @@ export default function Settings() {
               label="Select lower time"
               value={lowerTime}
               onChange={handleLowerTime}
+              disabled={!plugAutomation}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
@@ -418,6 +495,7 @@ export default function Settings() {
               label="Select upper time"
               value={upperTime}
               onChange={handleUpperTime}
+              disabled={!plugAutomation}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
@@ -431,6 +509,7 @@ export default function Settings() {
               multiple
               value={weekday}
               onChange={handleWeekdays}
+              disabled={!plugAutomation}
               input={
                 <OutlinedInput
                   id="select-multiple-days"
