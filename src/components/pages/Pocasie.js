@@ -78,7 +78,7 @@ export default function Pocasie() {
           <div id="slider">
             <WeatherCard
               weather="Teplota"
-              id="temperature"
+              id="teplota"
               value={poc.teplota + " °C"}
               image={highTemperature}
             />

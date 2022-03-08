@@ -24,6 +24,8 @@ import bathroom from "./components/pages/bathroom";
 import ToDo from "./components/pages/ToDo";
 import { db } from "./components/firebase_conf";
 import Settings from "./components/pages/Settings";
+import Temperature from "./components/pages/weather/Temperature";
+import Settings2 from "./components/pages/Settings2";
 
 var prach, teplota, vlhkost, intenzitaSvetla, zrazky, tlak;
 
@@ -111,6 +113,8 @@ function App() {
           <Route path="/bathroom" exact component={bathroom} />
           <Route path="/ToDo" exact component={ToDo} />
           <Route path="/Settings" exact component={Settings} />
+          <Route path="/teplota" exact component={Temperature} />
+          <Route path="/settings2" exact component={Settings2} />
         </Switch>
       </AnimatePresence>
     </Router>
