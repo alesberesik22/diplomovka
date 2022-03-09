@@ -15,8 +15,22 @@ import Button from "@mui/material/Button";
 import UseAnimations from "react-useanimations";
 import toggle from "react-useanimations/lib/toggle";
 import lock from "react-useanimations/lib/lock";
+import { Modal } from "@mui/material/";
+import Box from "@mui/material/Box";
 
 import { db } from "../firebase_conf";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 470,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 10,
+  p: 17,
+};
 
 export const WeatherIcons = {};
 export default function Home() {

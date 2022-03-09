@@ -13,6 +13,8 @@ import deviceIcon from "../images/settingIcons/addDevice.png";
 import { Modal } from "@mui/material/";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
 
 import TextField from "@mui/material/TextField";
 import { useTheme } from "@mui/material/styles";
@@ -28,6 +30,7 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import TimePicker from "@mui/lab/TimePicker";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
+import firebase, { firestore } from "firebase";
 
 const style = {
   position: "absolute",
@@ -74,6 +77,7 @@ function Settings2() {
       <Card img={windIcon} name="Wind alarm" id="4" />
       <Card img={plugIcon} name="Smart plug" id="5" />
       <Card img={deviceIcon} name="Add device" id="6" />
+      <Card img={deviceIcon} name="Add to alarm" id="7" />
     </div>
   );
 }
@@ -87,6 +91,7 @@ function Card(props) {
   const [personName, setPersonName] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [weekday, setWeekday] = useState([]);
+  const [deviceTypeSelected, setDeviceTypeSelected] = useState("");
   const [value, setValue] = useState();
   const [lowerTime, setLowerTime] = useState();
   const [upperTime, setUpperTime] = useState();
@@ -103,6 +108,15 @@ function Card(props) {
   const [windModal, setWindModal] = useState(false);
   const [rainModal, setRainModal] = useState(false);
   const [lightModal, setLightModal] = useState(false);
+  const [addToAlarmModal, setAddToAlarmModal] = useState(false);
+
+  const [addDevice, setAddDevice] = useState(false);
+  const [removeDevice, setRemoveDevice] = useState(false);
+
+  const [zigbeeName, setZigbeeName] = useState("");
+  const [zigbeeCode, setZigbeeCode] = useState("");
+
+  // const [names, setNames] = useState([]);
 
   const IOSSwitch = styled((props) => (
     <Switch
@@ -161,33 +175,79 @@ function Card(props) {
   }));
 
   const handleOpenModal = (event) => {
-    if (event.target.id == "1") {
+    if (event.target.id === "1") {
       console.log("Prve tlacidlo");
       setLightModal(true);
     }
-    if (event.target.id == "2") {
+    if (event.target.id === "2") {
       console.log("Druhe tlacidlo");
       setRainModal(true);
     }
-    if (event.target.id == "3") {
+    if (event.target.id === "3") {
       console.log("Tretie tlacidlo");
       setTemperatureModal(true);
     }
-    if (event.target.id == "4") {
+    if (event.target.id === "4") {
       console.log("Stvrte tlacidlo");
       setWindModal(true);
     }
-    if (event.target.id == "5") {
+    if (event.target.id === "5") {
       console.log("Piate tlacidlo");
       setOpenModal(true);
     }
+    if (event.target.id === "6") {
+    }
+    if (event.target.id === "7") {
+      setAddToAlarmModal(true);
+    }
+    if (event.target.id === "addDevice") {
+      console.log("add device");
+      setAddDevice(true);
+      setRemoveDevice(false);
+    }
+    if (event.target.id === "removeDevice") {
+      console.log("remove device");
+      setRemoveDevice(true);
+      setAddDevice(false);
+    }
+    if (event.target.id === "confirm") {
+      console.log("confirm");
+      if (deviceTypeSelected === "Light") {
+        db.collection("Automation").doc(String(zigbeeCode)).set({
+          id: zigbeeName,
+          color: "",
+          intensity: 0,
+          off: true,
+          doc: zigbeeCode,
+        });
+      }
+      if (deviceTypeSelected === "Plug") {
+        db.collection("Automation")
+          .doc(String(zigbeeCode))
+          .set({ id: zigbeeName, off: true, doc: zigbeeCode });
+      }
+      if (deviceTypeSelected === "Door lock") {
+        db.collection("Automation")
+          .doc(String(zigbeeCode))
+          .set({ id: zigbeeName, off: true, doc: zigbeeCode });
+      }
+    }
+    //setNames(...names, zigbeeCode);
+    console.log(String(zigbeeCode));
+    console.log(names);
+    setZigbeeCode("");
+    setZigbeeName("");
+    setDeviceTypeSelected("");
   };
-  const handleCloseModal = (event) => {
+  const handleCloseModal = () => {
     setOpenModal(false);
     setTemperatureModal(false);
     setLightModal(false);
     setRainModal(false);
     setWindModal(false);
+    setAddToAlarmModal(false);
+    setAddDevice(false);
+    setRemoveDevice(false);
   };
   const getAutomationLightInfo = () => {
     db.collection("Automation")
@@ -237,12 +297,21 @@ function Card(props) {
       });
   };
 
+  const getAutomationDevices = () => {
+    db.collection("Automation")
+      .doc("devices")
+      .onSnapshot((docSnapshot) => {
+        //setNames(docSnapshot.data().device);
+      });
+  };
+
   useEffect(() => {
     getAutomationLightInfo();
     getAutomationRainAlarmInfo();
     getAutomationTemperatureAlarmInfo();
     getAutomationWindAlarmInfo();
     getRelayInfo();
+    getAutomationDevices();
   }, []); //blank to run only on first launch
 
   const handleClick = () => {
@@ -331,6 +400,35 @@ function Card(props) {
     db.collection("Automation").doc("windAlarm").update({
       activationValue: event.target.value,
     });
+  };
+
+  const getAlarmElement = (event) => {
+    console.log(event.target.value);
+    setZigbeeName(event.target.value);
+  };
+
+  const addToAlarmList = (event) => {
+    console.log("value", event.target.value);
+    //console.log("event key", event.key);
+    if (event.key === "Enter") {
+      console.log(event.target.value);
+      //setNames((oldArray) => [...oldArray, event.target.value]);
+      console.log("modal list", names);
+      db.collection("Automation").doc("devices").update({
+        device: names,
+      });
+      console.log("modal list", names);
+    }
+  };
+
+  const handleDeviceTypeSelected = (event) => {
+    console.log(event.target.value);
+    setDeviceTypeSelected(event.target.value);
+  };
+
+  const addZigbeeDevice = (event) => {
+    console.log(event.target.value);
+    setZigbeeCode(event.target.value);
   };
 
   const handleWeekdays = (event) => {
@@ -493,7 +591,7 @@ function Card(props) {
                   }
                 />
               </div>
-              <div classname="low-temperature-field">
+              <div className="low-temperature-field">
                 <Box
                   component="form"
                   sx={{
@@ -510,7 +608,7 @@ function Card(props) {
                   />
                 </Box>
               </div>
-              <div classname="high-temperature-field">
+              <div className="high-temperature-field">
                 <Box
                   component="form"
                   sx={{
@@ -674,6 +772,88 @@ function Card(props) {
                 />
               </Box>
             </div>
+          </div>
+        </Box>
+      </Modal>
+      <Modal
+        open={addToAlarmModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <div className="add-to-alarm">
+            <h1 className="name">Add/Remove</h1>
+            <Stack spacing={2} direction="row">
+              <Button
+                variant="contained"
+                id="addDevice"
+                onClick={handleOpenModal}
+              >
+                Add
+              </Button>
+              <Button
+                variant="contained"
+                id="removeDevice"
+                onClick={handleOpenModal}
+              >
+                Remove
+              </Button>
+            </Stack>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+              {addDevice ? (
+                <InputLabel id="demo-simple-select-helper-label">
+                  Device type
+                </InputLabel>
+              ) : null}
+              {addDevice ? (
+                <Select
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={deviceTypeSelected}
+                  label="Select device type"
+                  onChange={handleDeviceTypeSelected}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={"Light"}>Light</MenuItem>
+                  <MenuItem value={"Plug"}>Plug</MenuItem>
+                  <MenuItem value={"Door lock"}>Door lock</MenuItem>
+                </Select>
+              ) : null}
+            </FormControl>
+            {addDevice ? (
+              <Box>
+                <TextField
+                  label={"Zigbee code of device"}
+                  id="margin-normal"
+                  margin="normal"
+                  value={zigbeeCode}
+                  onChange={addZigbeeDevice}
+                />
+              </Box>
+            ) : null}
+            {addDevice ? (
+              <Box>
+                <TextField
+                  label={"Name of device"}
+                  id="margin-normal"
+                  margin="normal"
+                  value={zigbeeName}
+                  onChange={getAlarmElement}
+                />
+              </Box>
+            ) : null}
+            {addDevice ? (
+              <Button
+                variant="contained"
+                id="confirm"
+                onClick={handleOpenModal}
+              >
+                Confirm
+              </Button>
+            ) : null}
           </div>
         </Box>
       </Modal>
