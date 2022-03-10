@@ -65,7 +65,7 @@ function getStyles(name, personName, theme) {
 }
 
 const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-const names = ["Obyvacka", "Kupelna", "Kuchyna", "Izba", "Chodba"];
+//const names = ["Obyvacka", "Kupelna", "Kuchyna", "Izba", "Chodba"];
 
 function Settings2() {
   return (
@@ -89,6 +89,7 @@ function Card(props) {
   const [rainClick, setrainClick] = useState();
   const [rainValue, setRainValue] = useState();
   const [personName, setPersonName] = useState([]);
+  const [rainAlarmDevices, setRainAlarmDevices] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [weekday, setWeekday] = useState([]);
   const [deviceTypeSelected, setDeviceTypeSelected] = useState("");
@@ -112,11 +113,12 @@ function Card(props) {
 
   const [addDevice, setAddDevice] = useState(false);
   const [removeDevice, setRemoveDevice] = useState(false);
+  const [deviceToRemove, setDeviceToRemove] = useState([]);
 
   const [zigbeeName, setZigbeeName] = useState("");
   const [zigbeeCode, setZigbeeCode] = useState("");
 
-  // const [names, setNames] = useState([]);
+  const [names, setNames] = useState([]);
 
   const IOSSwitch = styled((props) => (
     <Switch
@@ -231,10 +233,18 @@ function Card(props) {
           .doc(String(zigbeeCode))
           .set({ id: zigbeeName, off: true, doc: zigbeeCode });
       }
+      names.push(zigbeeCode);
+      db.collection("Automation").doc("devices").set({
+        device: names,
+      });
     }
-    //setNames(...names, zigbeeCode);
-    console.log(String(zigbeeCode));
-    console.log(names);
+    if (event.target.id === "confirmDelete") {
+      var array1 = names.filter((val) => !deviceToRemove.includes(val));
+      db.collection("Automation").doc("devices").set({
+        device: array1,
+      });
+      setDeviceToRemove([]);
+    }
     setZigbeeCode("");
     setZigbeeName("");
     setDeviceTypeSelected("");
@@ -264,7 +274,7 @@ function Card(props) {
       .doc("rainAlarm")
       .onSnapshot((docSnapshot) => {
         setrainClick(docSnapshot.data().on);
-        setRooms(docSnapshot.data().rooms);
+        setRainAlarmDevices(docSnapshot.data().rooms);
       });
   };
 
@@ -301,7 +311,7 @@ function Card(props) {
     db.collection("Automation")
       .doc("devices")
       .onSnapshot((docSnapshot) => {
-        //setNames(docSnapshot.data().device);
+        setNames(docSnapshot.data().device);
       });
   };
 
@@ -458,11 +468,22 @@ function Card(props) {
     });
   };
 
+  const handleRemoveModal = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setDeviceToRemove(
+      // On autofill we get a the stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    console.log(personName);
+  };
+
   const handleRainRooms = (event) => {
     const {
       target: { value },
     } = event;
-    setRooms(
+    setRainAlarmDevices(
       // On autofill we get a the stringified value.
       typeof value === "string" ? value.split(",") : value
     );
@@ -712,13 +733,13 @@ function Card(props) {
               <div className="select-lights">
                 <FormControl sx={{ m: 1, minWidth: 255 }}>
                   <InputLabel id="rain-selector-label">
-                    Select lights to alarm
+                    Select devices to alarm
                   </InputLabel>
                   <Select
                     labelId="rain-selector-label"
                     id="rain-selector"
                     multiple
-                    value={rooms}
+                    value={rainAlarmDevices}
                     onChange={handleRainRooms}
                     input={
                       <OutlinedInput
@@ -855,6 +876,53 @@ function Card(props) {
               </Button>
             ) : null}
           </div>
+          {removeDevice ? (
+            <div className="remove-devices">
+              <FormControl sx={{ m: 1, minWidth: 255 }}>
+                <InputLabel id="demo-multiple-chip-label">
+                  Select devices to remove
+                </InputLabel>
+                <Select
+                  labelId="demo-multiple-chip-label"
+                  id="demo-multiple-chip"
+                  multiple
+                  value={deviceToRemove}
+                  onChange={handleRemoveModal}
+                  input={
+                    <OutlinedInput
+                      id="select-multiple-chip"
+                      label="Select light"
+                    />
+                  }
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                  MenuProps={MenuProps}
+                >
+                  {names.map((name) => (
+                    <MenuItem
+                      key={name}
+                      value={name}
+                      style={getStyles(name, personName, theme)}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <Button
+                variant="contained"
+                id="confirmDelete"
+                onClick={handleOpenModal}
+              >
+                Confirm
+              </Button>
+            </div>
+          ) : null}
         </Box>
       </Modal>
     </div>
