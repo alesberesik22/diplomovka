@@ -10,13 +10,24 @@ import WeatherCard from "../WeatherCard";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 import { motion } from "framer-motion";
-import { ListItem, ListItemText } from "@mui/material";
+import MenuItem from "@mui/material/MenuItem";
+import {
+  Chip,
+  ListItem,
+  ListItemText,
+  OutlinedInput,
+  Stack,
+} from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import UseAnimations from "react-useanimations";
 import toggle from "react-useanimations/lib/toggle";
 import lock from "react-useanimations/lib/lock";
 import { Modal } from "@mui/material/";
 import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 import { db } from "../firebase_conf";
 
@@ -32,8 +43,28 @@ const style = {
   p: 17,
 };
 
+function getStyles(name, personName, theme) {
+  return {
+    fontWeight:
+      personName.indexOf(name) === -1
+        ? theme.typography.fontWeightRegular
+        : theme.typography.fontWeightMedium,
+  };
+}
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 export const WeatherIcons = {};
 export default function Home() {
+  const theme = useTheme();
   const [checked, setChecked] = useState([]);
   const [visibleRainAlarm, setVisibleRainAlarm] = useState();
   const [visibleTemperatureAlarm, setVisibleTemperatureAlarm] = useState(true);
@@ -59,6 +90,20 @@ export default function Home() {
   const [rainConfirmed, setRainConfirmed] = useState([]);
   const [lightConfirmed, setLightConfirmed] = useState([]);
   const [windConfirmed, setWindConfirmed] = useState([]);
+
+  const [automationListModal, setAutomationListModal] = useState(false);
+  const [alarmTypeSelected, setAlarmTypeSelected] = useState("");
+  const [addToAlarmList, setAddToAlarmList] = useState(false);
+  const [removeFromAlarmList, setRemoveFromAlarmList] = useState(false);
+
+  const [alarmsRemoved, setAlarmsRemoved] = useState([]);
+  const [alarmsAdded, setAlarmsAdded] = useState([{}]);
+
+  const [lightAlarmDevices, setLightAlarmDevices] = useState([]);
+  const [rainAlarmDevices, setRainAlarmDevices] = useState([]);
+
+  const [devicesInAlarm, setDevicesInAlarm] = useState([]);
+  const [devicesToRemoveSelection, setDevicesToRemoveSelection] = useState([]);
 
   useEffect(() => {
     getDoorInfo();
@@ -108,6 +153,7 @@ export default function Home() {
         setLightConfirmed(docSnapshot.data().confirmed);
         setVisibleLightAlarm(docSnapshot.data().visible);
         setLightAlarmValue(docSnapshot.data().activationValue);
+        setLightAlarmDevices(docSnapshot.data().rooms);
       });
     db.collection("Automation")
       .doc("rainAlarm")
@@ -115,6 +161,7 @@ export default function Home() {
         setChecked2(docSnapshot.data().on);
         setRainConfirmed(docSnapshot.data().confirmed);
         setVisibleRainAlarm(docSnapshot.data().visible);
+        setRainAlarmDevices(docSnapshot.data().rooms);
       });
     db.collection("Automation")
       .doc("temperatureAlarm")
@@ -205,7 +252,50 @@ export default function Home() {
       setVisibleTemperatureAlarm(false);
     }
   };
-  const handleChecked = (event) => {};
+  const handleAddAutomationList = (event) => {
+    setAutomationListModal(true);
+    if (event.target.id === "addToAlarmList") {
+      setAddToAlarmList(true);
+      setRemoveFromAlarmList(false);
+    }
+    if (event.target.id === "removeFromAlarmList") {
+      setRemoveFromAlarmList(true);
+      setAddToAlarmList(false);
+    }
+    if (event.target.id === "confirmAdd") {
+      //alarmsAdded.push([{ name: "test", id: "B20" }]);
+      setAlarmsAdded([...alarmsAdded, { name: "test", id: "B20" }]);
+      console.log(alarmsAdded);
+      db.collection("Automation").doc("alarmList").set({
+        list: alarmsAdded,
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    setAddToAlarmList(false);
+    setRemoveFromAlarmList(false);
+    setAutomationListModal(false);
+    setRemoveFromAlarmList(false);
+    setAddToAlarmList(false);
+  };
+
+  const handleAlarmTypeSelected = (event) => {
+    console.log(event.target.value);
+    setAlarmTypeSelected(event.target.value);
+    setDevicesInAlarm([]);
+  };
+
+  const handleRemoveSelectedAlarm = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setAlarmsRemoved(
+      // On autofill we get a the stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    console.log("");
+  };
 
   const handleClick = (event) => {
     if (event.target.id == "B1") {
@@ -306,6 +396,113 @@ export default function Home() {
             </div>
             <div className="automation-list">
               <h1>Automation list</h1>
+              <div
+                className="add-Automation-list"
+                id="addRemoveAutomationList"
+                onClick={handleAddAutomationList}
+              >
+                <i class="fa-solid fa-plus"></i>
+              </div>
+
+              <Modal
+                open={automationListModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <div className="select-automation-list-label">
+                    <p style={{ width: "400px" }}>
+                      Add or remove elements to list
+                    </p>
+                  </div>
+                  <div className="add-remove-Automtion-list">
+                    <Stack spacing={2} direction="row">
+                      <Button
+                        variant="contained"
+                        id="addToAlarmList"
+                        onClick={handleAddAutomationList}
+                      >
+                        Add
+                      </Button>
+                      <Button
+                        variant="contained"
+                        id="removeFromAlarmList"
+                        onClick={handleAddAutomationList}
+                      >
+                        Remove
+                      </Button>
+                    </Stack>
+                  </div>
+                  <div className="select-device-type">
+                    <FormControl sx={{ m: 1, minWidth: 200 }}>
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Select device type
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={alarmTypeSelected}
+                        label="Age"
+                        onChange={handleAlarmTypeSelected}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"Light"}>Light</MenuItem>
+                        <MenuItem value={"Rain"}>Rain</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <div className="add-devices">
+                    <FormControl sx={{ m: 1, minWidth: 255 }}>
+                      <InputLabel id="demo-multiple-chip-label">
+                        Select devices to add
+                      </InputLabel>
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={alarmsRemoved}
+                        onChange={handleRemoveSelectedAlarm}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Select light"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {lightAlarmDevices.map((name) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, devicesInAlarm, theme)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <Button
+                      variant="contained"
+                      id="confirmAdd"
+                      onClick={handleAddAutomationList}
+                    >
+                      Confirm
+                    </Button>
+                  </div>
+                </Box>
+              </Modal>
               <div className="automation-element-text">
                 <div
                   className="automation-list-element"
@@ -343,6 +540,19 @@ export default function Home() {
                     {checked4 ? "ON" : "OFF"}
                   </Button>
                 </div>
+                {alarmsAdded.map((x, i) => {
+                  return (
+                    <div
+                      className="automation-list-element"
+                      style={{ backgroundColor: backgroundColor4 }}
+                    >
+                      {x.name}
+                      <Button id={x.id} color="secondary" onClick={handleClick}>
+                        {checked4 ? "ON" : "OFF"}
+                      </Button>
+                    </div>
+                  );
+                })}
               </div>
             </div>
             <div className="notifications-card">

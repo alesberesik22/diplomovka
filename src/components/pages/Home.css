@@ -170,6 +170,32 @@ gridContainer {
   font-weight: bold;
   color: #1888ff;
 }
+.add-Automation-list {
+  position: absolute;
+  top: 2rem;
+  left: 1.5rem;
+}
+.select-device-type {
+  position: relative;
+  align-items: center;
+  top: -5rem;
+  left: -0.5rem;
+}
+.add-remove-Automtion-list {
+  position: relative;
+  top: -6rem;
+}
+.select-automation-list-label {
+  position: relative;
+  text-align: center;
+  top: -7rem;
+  left: -6rem;
+}
+.add-devices {
+  position: relative;
+  top: -5rem;
+  left: -0.5rem;
+}
 
 .rain-notification,
 .temperature-notification,
