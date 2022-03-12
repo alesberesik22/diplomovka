@@ -263,8 +263,22 @@ export default function Home() {
       setAddToAlarmList(false);
     }
     if (event.target.id === "confirmAdd") {
+      var name = "";
       //alarmsAdded.push([{ name: "test", id: "B20" }]);
-      setAlarmsAdded([...alarmsAdded, { name: "test", id: "B20" }]);
+      console.log("meno", String(alarmsRemoved[0]));
+      db.collection("Automation")
+        .doc(String(alarmsRemoved[0]))
+        .onSnapshot((docSnapshot) => {
+          name = docSnapshot.data().id;
+        });
+      var fullName = "";
+      if (alarmTypeSelected === "Light") {
+        fullName = "Light alarm " + name;
+      }
+      if (alarmTypeSelected === "Rain") {
+        fullName = "Rain alarm" + name;
+      }
+      setAlarmsAdded([...alarmsAdded, { name: fullName, id: "B20" }]);
       console.log(alarmsAdded);
       db.collection("Automation").doc("alarmList").set({
         list: alarmsAdded,
