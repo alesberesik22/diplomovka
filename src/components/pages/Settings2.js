@@ -221,6 +221,8 @@ function Card(props) {
           intensity: 0,
           off: true,
           doc: zigbeeCode,
+          rainAlarm: false,
+          lightAlarm: false,
         });
       }
       if (deviceTypeSelected === "Plug") {
@@ -487,6 +489,7 @@ function Card(props) {
       // On autofill we get a the stringified value.
       typeof value === "string" ? value.split(",") : value
     );
+    console.log(value);
     db.collection("Automation").doc("rainAlarm").update({
       rooms: value,
     });

@@ -105,11 +105,20 @@ export default function Home() {
   const [devicesInAlarm, setDevicesInAlarm] = useState([]);
   const [devicesToRemoveSelection, setDevicesToRemoveSelection] = useState([]);
 
+  const [alarmAddedConfirm, setAlarmAddedConfirm] = useState(false);
+
+  const [allDevices, setAllDevices] = useState([]);
+
+  const [rainAlarmOn, setRainAlarmOn] = useState(false);
+  const [lightAlarmOn, setLightAlarmOn] = useState(false);
+
   useEffect(() => {
     getDoorInfo();
     getAutomationInfo();
     getWeather();
     getNotificationInfo();
+    getAlarmList();
+    getAllDevices();
   }, []); //blank to run only on first launch
 
   useEffect(() => {
@@ -117,14 +126,34 @@ export default function Home() {
     var handle2 = setInterval(getAutomationInfo, 1000);
     var handle3 = setInterval(getWeather, 1000);
     var handle4 = setInterval(getNotificationInfo, 1000);
+    var handle5 = setInterval(getAlarmList, 1000);
+    var handle6 = setInterval(getAllDevices, 1000);
 
     return () => {
       clearInterval(handle);
       clearInterval(handle2);
       clearInterval(handle3);
       clearInterval(handle4);
+      clearInterval(handle5);
+      clearInterval(handle6);
     };
   });
+
+  const getAllDevices = () => {
+    db.collection("Automation")
+      .doc("devices")
+      .onSnapshot((docSnapshot) => {
+        setAllDevices(docSnapshot.data().device);
+      });
+  };
+
+  const getAlarmList = () => {
+    db.collection("Automation")
+      .doc("alarmList")
+      .onSnapshot((docSnapshot) => {
+        setAlarmsAdded(docSnapshot.data().list);
+      });
+  };
 
   const getDoorInfo = () => {
     db.collection("Devices")
@@ -258,14 +287,13 @@ export default function Home() {
       setAddToAlarmList(true);
       setRemoveFromAlarmList(false);
     }
-    if (event.target.id === "removeFromAlarmList") {
+    if (event.target.id === "removeFromAlarmButton") {
       setRemoveFromAlarmList(true);
       setAddToAlarmList(false);
     }
     if (event.target.id === "confirmAdd") {
       var name = "";
       //alarmsAdded.push([{ name: "test", id: "B20" }]);
-      console.log("meno", String(alarmsRemoved[0]));
       db.collection("Automation")
         .doc(String(alarmsRemoved[0]))
         .onSnapshot((docSnapshot) => {
@@ -273,18 +301,31 @@ export default function Home() {
         });
       var fullName = "";
       if (alarmTypeSelected === "Light") {
-        fullName = "Light alarm " + name;
+        fullName = "Light alarm " + alarmsRemoved[0];
       }
       if (alarmTypeSelected === "Rain") {
-        fullName = "Rain alarm" + name;
+        fullName = "Rain alarm" + alarmsRemoved[0];
       }
-      setAlarmsAdded([...alarmsAdded, { name: fullName, id: "B20" }]);
-      console.log(alarmsAdded);
+      setAlarmsAdded([
+        ...alarmsAdded,
+        { name: fullName, id: alarmsRemoved[0], alarmType: alarmTypeSelected },
+      ]);
+
+      setAlarmAddedConfirm(true);
+      setAlarmsRemoved([]);
+      setAlarmTypeSelected("");
+    }
+    if (event.target.id === "removeFromAlarmButton") {
+    }
+  };
+  useEffect(() => {
+    if (alarmAddedConfirm === true) {
       db.collection("Automation").doc("alarmList").set({
         list: alarmsAdded,
       });
     }
-  };
+    setAlarmAddedConfirm(false);
+  }, [alarmAddedConfirm]);
 
   const handleCloseModal = () => {
     setAddToAlarmList(false);
@@ -308,7 +349,6 @@ export default function Home() {
       // On autofill we get a the stringified value.
       typeof value === "string" ? value.split(",") : value
     );
-    console.log("");
   };
 
   const handleClick = (event) => {
@@ -373,6 +413,54 @@ export default function Home() {
       });
       setLightConfirmed(true);
     }
+    var key = event.target.id;
+    //console.log(alarmsAdded.some(item => item.hasOwnProperty('id')));
+    //console.log("event.target.id", event.target.id);
+    console.log("key", key);
+    alarmsAdded.map((item) => {
+      if (key === item.id) {
+        db.collection("Automation")
+          .doc(key)
+          .onSnapshot((docSnapshot) => {
+            setLightAlarmOn(docSnapshot.data().lightAlarm);
+            setRainAlarmOn(docSnapshot.data().rainAlarm);
+          });
+        if (item.alarmType == "Light") {
+          console.log("Som tu");
+          console.log("onLightAlarm", lightAlarmOn);
+          if (lightAlarmOn === true) {
+            console.log("Som tu true");
+            db.collection("Automation").doc(key).update({
+              lightAlarm: false,
+            });
+          }
+          if (lightAlarmOn === false) {
+            console.log("Som tu false");
+            db.collection("Automation").doc(key).update({
+              lightAlarm: true,
+            });
+          }
+        }
+        if (item.alarmType == "Rain") {
+          if (item.alarmType == "Light") {
+            console.log("Som tu");
+            console.log("onLightAlarm", lightAlarmOn);
+            if (rainAlarmOn === true) {
+              console.log("Som tu true");
+              db.collection("Automation").doc(key).update({
+                rainAlarm: false,
+              });
+            }
+            if (rainAlarmOn === false) {
+              console.log("Som tu false");
+              db.collection("Automation").doc(key).update({
+                rainAlarm: true,
+              });
+            }
+          }
+        }
+      }
+    });
     getNotificationInfo();
   };
 
@@ -441,7 +529,7 @@ export default function Home() {
                       </Button>
                       <Button
                         variant="contained"
-                        id="removeFromAlarmList"
+                        id="removeFromAlarmButton"
                         onClick={handleAddAutomationList}
                       >
                         Remove
