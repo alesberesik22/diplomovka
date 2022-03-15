@@ -106,11 +106,13 @@ export default function Home() {
   const [devicesToRemoveSelection, setDevicesToRemoveSelection] = useState([]);
 
   const [alarmAddedConfirm, setAlarmAddedConfirm] = useState(false);
+  const [alarmRemovedFromList, setAlarmRemovedFromList] = useState(false);
 
   const [allDevices, setAllDevices] = useState([]);
 
   const [rainAlarmOn, setRainAlarmOn] = useState(false);
   const [lightAlarmOn, setLightAlarmOn] = useState(false);
+  const [alarmToRemove, setAlarmToRemove] = useState([]);
 
   useEffect(() => {
     getDoorInfo();
@@ -122,18 +124,18 @@ export default function Home() {
   }, []); //blank to run only on first launch
 
   useEffect(() => {
-    var handle = setInterval(getDoorInfo, 1000);
-    var handle2 = setInterval(getAutomationInfo, 1000);
-    var handle3 = setInterval(getWeather, 1000);
-    var handle4 = setInterval(getNotificationInfo, 1000);
-    var handle5 = setInterval(getAlarmList, 1000);
-    var handle6 = setInterval(getAllDevices, 1000);
+    //var handle = setInterval(getDoorInfo, 6000);
+    var handle2 = setInterval(getAutomationInfo, 6000);
+    //var handle3 = setInterval(getWeather, 1000);
+    //var handle4 = setInterval(getNotificationInfo, 6000);
+    var handle5 = setInterval(getAlarmList, 6000);
+    var handle6 = setInterval(getAllDevices, 6000);
 
     return () => {
-      clearInterval(handle);
+      //clearInterval(handle);
       clearInterval(handle2);
-      clearInterval(handle3);
-      clearInterval(handle4);
+      //clearInterval(handle3);
+      //clearInterval(handle4);
       clearInterval(handle5);
       clearInterval(handle6);
     };
@@ -317,6 +319,14 @@ export default function Home() {
     }
     if (event.target.id === "removeFromAlarmButton") {
     }
+    if (event.target.id === "removeDeviceFromAlarmList") {
+      console.log("before remove", alarmsAdded);
+      setAlarmsAdded(
+        alarmsAdded.filter((item) => item.id !== alarmToRemove[0])
+      );
+      setAlarmRemovedFromList(true);
+      setAlarmToRemove([]);
+    }
   };
   useEffect(() => {
     if (alarmAddedConfirm === true) {
@@ -327,6 +337,16 @@ export default function Home() {
     setAlarmAddedConfirm(false);
   }, [alarmAddedConfirm]);
 
+  useEffect(() => {
+    if (alarmRemovedFromList === true) {
+      console.log("removed", alarmsAdded);
+      db.collection("Automation").doc("alarmList").set({
+        list: alarmsAdded,
+      });
+    }
+    setAlarmRemovedFromList(false);
+  }, [alarmRemovedFromList]);
+
   const handleCloseModal = () => {
     setAddToAlarmList(false);
     setRemoveFromAlarmList(false);
@@ -336,7 +356,6 @@ export default function Home() {
   };
 
   const handleAlarmTypeSelected = (event) => {
-    console.log(event.target.value);
     setAlarmTypeSelected(event.target.value);
     setDevicesInAlarm([]);
   };
@@ -351,10 +370,18 @@ export default function Home() {
     );
   };
 
+  const handleAlarmsToRemove = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setAlarmToRemove(
+      // On autofill we get a the stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
   const handleClick = (event) => {
     if (event.target.id == "B1") {
-      console.log("ID ", event.target.id);
-      console.log("Checked: ", !checked);
       db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
         on: !checked,
       });
@@ -362,8 +389,6 @@ export default function Home() {
       checked ? setBackgroundColor("") : setBackgroundColor("#1888ff");
     }
     if (event.target.id == "B2") {
-      console.log("Checked2: ", !checked2);
-      console.log("ID ", event.target.id);
       db.collection("Automation").doc("rainAlarm").update({
         on: !checked2,
       });
@@ -371,8 +396,6 @@ export default function Home() {
       checked2 ? setBackgroundColor2("") : setBackgroundColor2("#1888ff");
     }
     if (event.target.id == "B3") {
-      console.log("Checked3: ", !checked3);
-      console.log("ID ", event.target.id);
       db.collection("Automation").doc("temperatureAlarm").update({
         on: !checked3,
       });
@@ -380,8 +403,6 @@ export default function Home() {
       checked3 ? setBackgroundColor3("") : setBackgroundColor3("#1888ff");
     }
     if (event.target.id == "B4") {
-      console.log("Checked4: ", !checked4);
-      console.log("ID ", event.target.id);
       db.collection("Automation").doc("windAlarm").update({
         on: !checked4,
       });
@@ -414,9 +435,6 @@ export default function Home() {
       setLightConfirmed(true);
     }
     var key = event.target.id;
-    //console.log(alarmsAdded.some(item => item.hasOwnProperty('id')));
-    //console.log("event.target.id", event.target.id);
-    console.log("key", key);
     alarmsAdded.map((item) => {
       if (key === item.id) {
         db.collection("Automation")
@@ -426,37 +444,27 @@ export default function Home() {
             setRainAlarmOn(docSnapshot.data().rainAlarm);
           });
         if (item.alarmType == "Light") {
-          console.log("Som tu");
-          console.log("onLightAlarm", lightAlarmOn);
           if (lightAlarmOn === true) {
-            console.log("Som tu true");
             db.collection("Automation").doc(key).update({
               lightAlarm: false,
             });
           }
           if (lightAlarmOn === false) {
-            console.log("Som tu false");
             db.collection("Automation").doc(key).update({
               lightAlarm: true,
             });
           }
         }
         if (item.alarmType == "Rain") {
-          if (item.alarmType == "Light") {
-            console.log("Som tu");
-            console.log("onLightAlarm", lightAlarmOn);
-            if (rainAlarmOn === true) {
-              console.log("Som tu true");
-              db.collection("Automation").doc(key).update({
-                rainAlarm: false,
-              });
-            }
-            if (rainAlarmOn === false) {
-              console.log("Som tu false");
-              db.collection("Automation").doc(key).update({
-                rainAlarm: true,
-              });
-            }
+          if (rainAlarmOn === true) {
+            db.collection("Automation").doc(key).update({
+              rainAlarm: false,
+            });
+          }
+          if (rainAlarmOn === false) {
+            db.collection("Automation").doc(key).update({
+              rainAlarm: true,
+            });
           }
         }
       }
@@ -538,70 +546,187 @@ export default function Home() {
                   </div>
                   <div className="select-device-type">
                     <FormControl sx={{ m: 1, minWidth: 200 }}>
-                      <InputLabel id="demo-simple-select-helper-label">
-                        Select device type
-                      </InputLabel>
-                      <Select
-                        labelId="demo-simple-select-helper-label"
-                        id="demo-simple-select-helper"
-                        value={alarmTypeSelected}
-                        label="Age"
-                        onChange={handleAlarmTypeSelected}
-                      >
-                        <MenuItem value="">
-                          <em>None</em>
-                        </MenuItem>
-                        <MenuItem value={"Light"}>Light</MenuItem>
-                        <MenuItem value={"Rain"}>Rain</MenuItem>
-                      </Select>
+                      {addToAlarmList ? (
+                        <InputLabel id="demo-simple-select-helper-label">
+                          Select device type
+                        </InputLabel>
+                      ) : null}
+                      {addToAlarmList ? (
+                        <Select
+                          labelId="demo-simple-select-helper-label"
+                          id="demo-simple-select-helper"
+                          value={alarmTypeSelected}
+                          label="Age"
+                          onChange={handleAlarmTypeSelected}
+                        >
+                          <MenuItem value="">
+                            <em>None</em>
+                          </MenuItem>
+                          <MenuItem value={"Light"}>Light</MenuItem>
+                          <MenuItem value={"Rain"}>Rain</MenuItem>
+                        </Select>
+                      ) : null}
                     </FormControl>
                   </div>
                   <div className="add-devices">
                     <FormControl sx={{ m: 1, minWidth: 255 }}>
-                      <InputLabel id="demo-multiple-chip-label">
-                        Select devices to add
-                      </InputLabel>
-                      <Select
-                        labelId="demo-multiple-chip-label"
-                        id="demo-multiple-chip"
-                        multiple
-                        value={alarmsRemoved}
-                        onChange={handleRemoveSelectedAlarm}
-                        input={
-                          <OutlinedInput
-                            id="select-multiple-chip"
-                            label="Select light"
-                          />
-                        }
-                        renderValue={(selected) => (
-                          <Box
-                            sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}
-                          >
-                            {selected.map((value) => (
-                              <Chip key={value} label={value} />
-                            ))}
-                          </Box>
-                        )}
-                        MenuProps={MenuProps}
-                      >
-                        {lightAlarmDevices.map((name) => (
-                          <MenuItem
-                            key={name}
-                            value={name}
-                            style={getStyles(name, devicesInAlarm, theme)}
-                          >
-                            {name}
-                          </MenuItem>
-                        ))}
-                      </Select>
+                      {alarmTypeSelected === "Light" ? (
+                        <InputLabel id="demo-multiple-chip-label">
+                          Select devices to add
+                        </InputLabel>
+                      ) : null}
+                      {alarmTypeSelected === "Light" ? (
+                        <Select
+                          labelId="demo-multiple-chip-label"
+                          id="demo-multiple-chip"
+                          multiple
+                          value={alarmsRemoved}
+                          onChange={handleRemoveSelectedAlarm}
+                          input={
+                            <OutlinedInput
+                              id="select-multiple-chip"
+                              label="Select light"
+                            />
+                          }
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip key={value} label={value} />
+                              ))}
+                            </Box>
+                          )}
+                          MenuProps={MenuProps}
+                        >
+                          {lightAlarmDevices.map((name) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              style={getStyles(name, devicesInAlarm, theme)}
+                            >
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : null}
                     </FormControl>
-                    <Button
-                      variant="contained"
-                      id="confirmAdd"
-                      onClick={handleAddAutomationList}
-                    >
-                      Confirm
-                    </Button>
+                    <FormControl sx={{ m: 1, minWidth: 255 }}>
+                      {alarmTypeSelected === "Rain" ? (
+                        <InputLabel id="demo-multiple-chip-label">
+                          Select devices to add
+                        </InputLabel>
+                      ) : null}
+                      {alarmTypeSelected === "Rain" ? (
+                        <Select
+                          labelId="demo-multiple-chip-label"
+                          id="demo-multiple-chip"
+                          multiple
+                          value={alarmsRemoved}
+                          onChange={handleRemoveSelectedAlarm}
+                          input={
+                            <OutlinedInput
+                              id="select-multiple-chip"
+                              label="Select rain"
+                            />
+                          }
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip key={value} label={value} />
+                              ))}
+                            </Box>
+                          )}
+                          MenuProps={MenuProps}
+                        >
+                          {rainAlarmDevices.map((name) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              style={getStyles(name, devicesInAlarm, theme)}
+                            >
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : null}
+                    </FormControl>
+                    {addToAlarmList ? (
+                      <Button
+                        variant="contained"
+                        id="confirmAdd"
+                        onClick={handleAddAutomationList}
+                      >
+                        Confirm
+                      </Button>
+                    ) : null}
+                  </div>
+                  <div className="add-devices">
+                    <FormControl sx={{ m: 1, minWidth: 255 }}>
+                      {removeFromAlarmList ? (
+                        <InputLabel id="demo-multiple-chip-label">
+                          Select devices to remove
+                        </InputLabel>
+                      ) : null}
+                      {removeFromAlarmList ? (
+                        <Select
+                          labelId="demo-multiple-chip-label"
+                          id="demo-multiple-chip"
+                          multiple
+                          value={alarmToRemove}
+                          onChange={handleAlarmsToRemove}
+                          input={
+                            <OutlinedInput
+                              id="select-multiple-chip"
+                              label="Select light"
+                            />
+                          }
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip key={value} label={value} />
+                              ))}
+                            </Box>
+                          )}
+                          MenuProps={MenuProps}
+                        >
+                          {allDevices.map((name) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              style={getStyles(name, devicesInAlarm, theme)}
+                            >
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : null}
+                    </FormControl>
+                    {removeFromAlarmList ? (
+                      <Button
+                        variant="contained"
+                        id="removeDeviceFromAlarmList"
+                        onClick={handleAddAutomationList}
+                      >
+                        Confirm
+                      </Button>
+                    ) : null}
                   </div>
                 </Box>
               </Modal>

@@ -31,6 +31,7 @@ import TimePicker from "@mui/lab/TimePicker";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import firebase, { firestore } from "firebase";
+import AddDevice from "../AddDevice";
 
 const style = {
   position: "absolute",
@@ -76,8 +77,8 @@ function Settings2() {
       <Card img={tempIcon} name="Temperature alarm" id="3" />
       <Card img={windIcon} name="Wind alarm" id="4" />
       <Card img={plugIcon} name="Smart plug" id="5" />
-      <Card img={deviceIcon} name="Add device" id="6" />
-      <Card img={deviceIcon} name="Add to alarm" id="7" />
+      <Card img={deviceIcon} name="Connected ZigBee devices" id="6" />
+      <Card img={deviceIcon} name="Add devices" id="7" />
     </div>
   );
 }
@@ -110,6 +111,7 @@ function Card(props) {
   const [rainModal, setRainModal] = useState(false);
   const [lightModal, setLightModal] = useState(false);
   const [addToAlarmModal, setAddToAlarmModal] = useState(false);
+  const [listOfZigbeeModal, setListOfZigbeeModal] = useState(false);
 
   const [addDevice, setAddDevice] = useState(false);
   const [removeDevice, setRemoveDevice] = useState(false);
@@ -198,6 +200,7 @@ function Card(props) {
       setOpenModal(true);
     }
     if (event.target.id === "6") {
+      setListOfZigbeeModal(true);
     }
     if (event.target.id === "7") {
       setAddToAlarmModal(true);
@@ -216,6 +219,7 @@ function Card(props) {
       console.log("confirm");
       if (deviceTypeSelected === "Light") {
         db.collection("Automation").doc(String(zigbeeCode)).set({
+          deviceType: deviceTypeSelected,
           id: zigbeeName,
           color: "",
           intensity: 0,
@@ -223,17 +227,26 @@ function Card(props) {
           doc: zigbeeCode,
           rainAlarm: false,
           lightAlarm: false,
+          room: "none",
         });
       }
       if (deviceTypeSelected === "Plug") {
-        db.collection("Automation")
-          .doc(String(zigbeeCode))
-          .set({ id: zigbeeName, off: true, doc: zigbeeCode });
+        db.collection("Automation").doc(String(zigbeeCode)).set({
+          deviceType: deviceTypeSelected,
+          id: zigbeeName,
+          off: true,
+          doc: zigbeeCode,
+          room: "none",
+        });
       }
       if (deviceTypeSelected === "Door lock") {
-        db.collection("Automation")
-          .doc(String(zigbeeCode))
-          .set({ id: zigbeeName, off: true, doc: zigbeeCode });
+        db.collection("Automation").doc(String(zigbeeCode)).set({
+          deviceType: deviceTypeSelected,
+          id: zigbeeName,
+          off: true,
+          doc: zigbeeCode,
+          room: "none",
+        });
       }
       names.push(zigbeeCode);
       db.collection("Automation").doc("devices").set({
@@ -260,6 +273,7 @@ function Card(props) {
     setAddToAlarmModal(false);
     setAddDevice(false);
     setRemoveDevice(false);
+    setListOfZigbeeModal(false);
   };
   const getAutomationLightInfo = () => {
     db.collection("Automation")
@@ -926,6 +940,16 @@ function Card(props) {
               </Button>
             </div>
           ) : null}
+        </Box>
+      </Modal>
+      <Modal
+        open={listOfZigbeeModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <AddDevice />
         </Box>
       </Modal>
     </div>
