@@ -221,7 +221,7 @@ function Card(props) {
         db.collection("Automation").doc(String(zigbeeCode)).set({
           deviceType: deviceTypeSelected,
           id: zigbeeName,
-          color: "",
+          color: "#ff00f2",
           intensity: 0,
           off: true,
           doc: zigbeeCode,

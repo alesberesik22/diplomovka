@@ -21,8 +21,8 @@ function LightControll(props) {
   }, []); //blank to run only on first launch
 
   const getDeviceInfo = () => {
-    db.collection("Devices")
-      .doc("VgkSjvc6cnNYmfBOT3vJ")
+    db.collection(props.collection)
+      .doc(props.doc)
       .onSnapshot((docSnapshot) => {
         setClick(docSnapshot.data().off);
         setLight(docSnapshot.data().intensity);
@@ -32,20 +32,20 @@ function LightControll(props) {
 
   const handleColorChange = (color) => {
     console.log("Farba :" + color);
-    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+    db.collection(props.collection).doc(props.doc).update({
       color: color,
     });
   };
 
   const handleLightIntensity = (intensity) => {
     console.log("Intenzita: " + intensity);
-    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+    db.collection(props.collection).doc(props.doc).update({
       intensity: intensity,
     });
   };
   const getValue = (e, val) => {
     console.log(val);
-    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+    db.collection(props.collection).doc(props.doc).update({
       off: val,
     });
   };
