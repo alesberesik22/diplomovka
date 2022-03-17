@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Button from "@mui/material/Button";
+import Plug from "../Plug";
 
 const style = {
   position: "absolute",
@@ -30,6 +31,8 @@ const style = {
 
 export default function Livingroom() {
   const [displayLight, setDisplayLight] = useState(false);
+  const [displayPlug, setDisplayPlug] = useState(false);
+  const [sendPlugToDB, setSendPlugToDB] = useState(false);
   const [sendToDB, setSendToDB] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [deviceSelectedToAdd, setDeviceSelectedToAdd] = useState("");
@@ -46,7 +49,12 @@ export default function Livingroom() {
     db.collection("Automation")
       .doc("livingroom")
       .onSnapshot((docSnapshot) => {
-        setLightDevices(docSnapshot.data().list); 
+        setLightDevices(docSnapshot.data().list);
+      });
+    db.collection("Automation")
+      .doc("livingroom")
+      .onSnapshot((docSnapshot) => {
+        setPlugDevices(docSnapshot.data().listPlug);
       });
   };
 
@@ -65,7 +73,16 @@ export default function Livingroom() {
   const confirmAddDevice = () => {
     console.log(deviceSelectedToAdd);
 
-    setDisplayLight(true);
+    db.collection("Automation")
+      .doc(deviceSelectedToAdd)
+      .onSnapshot((docSnapshot) => {
+        if (docSnapshot.data().deviceType === "Light") {
+          setDisplayLight(true);
+        }
+        if (docSnapshot.data().deviceType === "Plug") {
+          setDisplayPlug(true);
+        }
+      });
   };
 
   useEffect(() => {
@@ -114,9 +131,49 @@ export default function Livingroom() {
   }, [displayLight]);
 
   useEffect(() => {
+    if (displayPlug === true) {
+      db.collection("Automation")
+        .doc(deviceSelectedToAdd)
+        .onSnapshot((docSnapshot) => {
+          if (plugDevices[0].doc === undefined) {
+            setPlugDevices([
+              {
+                doc: docSnapshot.data().doc,
+                id: docSnapshot.data().id,
+                off: docSnapshot.data().off,
+              },
+            ]);
+          } else {
+            setPlugDevices([
+              ...plugDevices,
+              {
+                doc: docSnapshot.data().doc,
+                id: docSnapshot.data().id,
+                off: docSnapshot.data().off,
+              },
+            ]);
+          }
+        });
+    }
+    setSendPlugToDB(true);
+    setDisplayPlug(false);
+  }, [displayPlug]);
+
+  useEffect(() => {
+    if (sendPlugToDB === true) {
+      db.collection("Automation").doc("livingroom").set({
+        list: lightDevices,
+        listPlug: plugDevices,
+      });
+    }
+    setSendPlugToDB(false);
+  }, [sendPlugToDB]);
+
+  useEffect(() => {
     if (sendToDB === true) {
       db.collection("Automation").doc("livingroom").set({
         list: lightDevices,
+        listPlug: plugDevices,
       });
     }
     setSendToDB(false);
@@ -171,12 +228,26 @@ export default function Livingroom() {
             );
           })
         : null}
+      {plugDevices[0].doc !== undefined
+        ? plugDevices.map((device) => {
+            return (
+              <div className="lightCardsFloat">
+                <Plug
+                  doc={device.doc}
+                  collection="Automation"
+                  name={device.id}
+                ></Plug>
+              </div>
+            );
+          })
+        : null}
       <div className="lightCardsFloat">
         <LightControll
           doc="VgkSjvc6cnNYmfBOT3vJ"
           collection="Devices"
         ></LightControll>
       </div>
+      <div className="lightCardsFloat"></div>
     </div>
   );
 }
