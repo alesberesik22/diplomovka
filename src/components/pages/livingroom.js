@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { isValidElement, useEffect, useState } from "react";
 import LightControll from "../LightControll";
 import "./livingroom.css";
 import "../../App.css";
@@ -8,6 +8,7 @@ import { db } from "../firebase_conf";
 import Fab from "@mui/material/Fab";
 import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 import Modal from "@mui/material/Modal";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
@@ -32,13 +33,21 @@ const style = {
 export default function Livingroom() {
   const [displayLight, setDisplayLight] = useState(false);
   const [displayPlug, setDisplayPlug] = useState(false);
+
   const [sendPlugToDB, setSendPlugToDB] = useState(false);
   const [sendToDB, setSendToDB] = useState(false);
+  const [removeFromDB, setRemoveFromDB] = useState(false);
+
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [openRemoveModal, setOpenRemoveModal] = useState(false);
+
   const [deviceSelectedToAdd, setDeviceSelectedToAdd] = useState("");
+  const [deviceSelectedToRemove, setDeviceSelectedToRemove] = useState("");
+
   const [lightDevices, setLightDevices] = useState([{}]);
   const [plugDevices, setPlugDevices] = useState([{}]);
   const [devices, setDevices] = useState([]);
+  const [allDevices, setAllDevices] = useState([{}]);
 
   const getDevices = () => {
     db.collection("Automation")
@@ -56,6 +65,12 @@ export default function Livingroom() {
       .onSnapshot((docSnapshot) => {
         setPlugDevices(docSnapshot.data().listPlug);
       });
+    db.collection("Automation")
+      .doc("livingroom")
+      .onSnapshot((docSnapshot) => {
+        setAllDevices(docSnapshot.data().list);
+        setAllDevices([...allDevices, docSnapshot.data().listPlug]);
+      });
   };
 
   const handleAddDevices = () => {
@@ -64,10 +79,19 @@ export default function Livingroom() {
   };
   const handleCloseModal = () => {
     setOpenAddModal(false);
+    setOpenRemoveModal(false);
+  };
+
+  const handleRemoveDevices = () => {
+    setOpenRemoveModal(true);
   };
 
   const handleDeviceToAdd = (event) => {
     setDeviceSelectedToAdd(event.target.value);
+  };
+
+  const handleDeviceToRemove = (event) => {
+    setDeviceSelectedToRemove(event.target.value);
   };
 
   const confirmAddDevice = () => {
@@ -84,6 +108,35 @@ export default function Livingroom() {
         }
       });
   };
+
+  const confirmRemoveDevice = () => {
+    if (plugDevices.some((name) => name.doc.includes(deviceSelectedToRemove))) {
+      console.log("ano");
+      setPlugDevices(
+        plugDevices.filter((item) => item.doc !== deviceSelectedToRemove)
+      );
+      setRemoveFromDB(true);
+    }
+    if (
+      lightDevices.some((name) => name.doc.includes(deviceSelectedToRemove))
+    ) {
+      console.log("ano light");
+      setLightDevices(
+        lightDevices.filter((item) => item.doc !== deviceSelectedToRemove)
+      );
+      setRemoveFromDB(true);
+    }
+  };
+
+  useEffect(() => {
+    if (removeFromDB === true) {
+      db.collection("Automation").doc("livingroom").set({
+        list: lightDevices,
+        listPlug: plugDevices,
+      });
+    }
+    setRemoveFromDB(false);
+  }, [removeFromDB]);
 
   useEffect(() => {
     if (displayLight === true) {
@@ -189,7 +242,41 @@ export default function Livingroom() {
         <Fab color="primary" aria-label="add" onClick={handleAddDevices}>
           <AddIcon />
         </Fab>
+        <Fab color="primary" aria-label="remove" onClick={handleRemoveDevices}>
+          <RemoveIcon />
+        </Fab>
       </Box>
+      <Modal
+        open={openRemoveModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <Box sx={{ minWidth: 120 }}>
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">
+                Remove devices
+              </InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={deviceSelectedToRemove}
+                label="Age"
+                onChange={handleDeviceToRemove}
+              >
+                {plugDevices.map((device) => (
+                  <MenuItem value={device.doc}>{device.id}</MenuItem>
+                ))}
+                {lightDevices.map((device) => (
+                  <MenuItem value={device.doc}>{device.id}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Box>
+          <Button onClick={confirmRemoveDevice}>Remove</Button>
+        </Box>
+      </Modal>
       <Modal
         open={openAddModal}
         onClose={handleCloseModal}
@@ -199,7 +286,7 @@ export default function Livingroom() {
         <Box sx={style}>
           <Box sx={{ minWidth: 120 }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
+              <InputLabel id="demo-simple-select-label">Add devices</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
