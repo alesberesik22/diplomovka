@@ -29,6 +29,9 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 import { db } from "../firebase_conf";
 
 const style = {
@@ -474,16 +477,6 @@ export default function Home() {
 
   document.body.classList.add("no-sroll");
 
-  const slideLeft = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft - 1200;
-  };
-
-  const slideRight = () => {
-    var slider = document.getElementById("slider");
-    slider.scrollLeft = slider.scrollLeft + 1200;
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -492,12 +485,7 @@ export default function Home() {
     >
       <div className="body">
         <div className="home-container">
-          <MdChevronLeft
-            size={40}
-            className="slider-icon left"
-            onClick={slideLeft}
-          />
-          <div id="slider">
+          <div id="">
             <div className="karty">
               <WeatherDashCard />
             </div>
@@ -511,7 +499,7 @@ export default function Home() {
                 id="addRemoveAutomationList"
                 onClick={handleAddAutomationList}
               >
-                <i class="fa-solid fa-plus"></i>
+                <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
               </div>
 
               <Modal
@@ -843,11 +831,6 @@ export default function Home() {
               <div className="diplay-electricity-value">{electricity}</div>
             </div>
           </div>
-          <MdChevronRight
-            size={40}
-            className="slider-icon right"
-            onClick={slideRight}
-          />
         </div>
       </div>
     </motion.div>

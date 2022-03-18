@@ -32,7 +32,8 @@ gridContainer {
 }
 
 .karty {
-  margin-top: 0px;
+  position: relative;
+  top: 21rem;
   margin-left: 110px;
   /* left: 300px; */
   width: 23.75rem;
@@ -49,21 +50,21 @@ gridContainer {
 .karta2 {
   /* margin-top: -500px; */
   position: relative;
-  margin-top: -500px;
-  margin-left: 530px;
+  top: -11rem;
+  margin-top: 15px;
+  left: 530px;
   width: 300px;
   height: 150px;
 }
 .automation-list {
   position: relative;
-  top: 2rem;
+  top: -8rem;
+  margin-top: 15px;
   left: 33rem;
   display: flex;
   flex-direction: column;
-  /* margin: auto; */
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
-  padding: 20px 10px;
   border-radius: 10px;
   width: 23.75rem;
   background: white;
@@ -85,7 +86,7 @@ gridContainer {
 }
 .notifications-card {
   position: relative;
-  top: -1rem;
+  top: -21rem;
   left: 7rem;
   display: flex;
   flex-direction: column;
@@ -106,9 +107,10 @@ gridContainer {
   margin-top: -1.5rem;
 }
 .door-check-card {
-  position: relative;
-  top: -56.1rem;
-  left: 53.1rem;
+  position: absolute;
+  /* top: -56.1rem; */
+  top: 10rem;
+  left: 53.5rem;
   display: flex;
   flex-direction: column;
   /* margin: auto; */
@@ -137,8 +139,8 @@ gridContainer {
   color: #1888ff;
 }
 .electricity-card {
-  position: relative;
-  top: -55.5rem;
+  position: absolute;
+  top: 21rem;
   left: 58rem;
   display: flex;
   flex-direction: column;
@@ -210,10 +212,12 @@ gridContainer {
 }
 @media (max-width: 767px) {
   .notifications-card {
-    top: 3rem;
+    position: relative;
+    top: -17rem;
   }
   .automation-list {
+    position: relative;
     left: 6.5rem;
-    top: 50rem;
+    top: 28rem;
   }
 }

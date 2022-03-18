@@ -42,6 +42,7 @@ const style = {
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 10,
+  borderRadius: 4,
   p: 17,
 };
 
