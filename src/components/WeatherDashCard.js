@@ -97,7 +97,7 @@ function WeatherDashCard(props) {
           <WeatherInfoComponent name="Tlak" value={poc.tlak} />
           <WeatherInfoComponent name="Prach" value={poc.prach} />
           <WeatherInfoComponent name="Svetlo" value={poc.intenzitaSvetla} />
-          <WeatherInfoComponent name="Vietor" value="50 km/h" />
+          <WeatherInfoComponent name="Vietor" value="6 km/h" />
         </div>
       ))}
     </div>

@@ -7,6 +7,7 @@ import bathroomImg from "../images/bathroom.png";
 import bedroomImg from "../images/bedroom.png";
 import kitchenImg from "../images/kitchen.png";
 import livingroomImg from "../images/livingRoom.png";
+import hall from "../images/download.png";
 
 import { motion } from "framer-motion";
 
@@ -37,7 +38,7 @@ export default function Izby() {
       id: "/bathroom",
     },
     {
-      image: "https://picsum.photos/320/250",
+      image: hall,
       title: "Hall",
       description: "7 zariadeni",
       id: "/hall",

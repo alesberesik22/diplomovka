@@ -122,6 +122,7 @@ function Card(props) {
   const [zigbeeCode, setZigbeeCode] = useState("");
 
   const [names, setNames] = useState([]);
+  const [temperatureAlarmDevices, setTemperatureAlarmDevices] = useState([]);
 
   const IOSSwitch = styled((props) => (
     <Switch
@@ -237,6 +238,7 @@ function Card(props) {
           id: zigbeeName,
           off: true,
           doc: zigbeeCode,
+          temperatureAlarm: false,
           room: "none",
         });
       }
@@ -302,6 +304,7 @@ function Card(props) {
         setTemperatureClick(docSnapshot.data().on);
         setLowerTemperature(docSnapshot.data().lowerValue);
         setHighTemperature(docSnapshot.data().upperValue);
+        setTemperatureAlarmDevices(docSnapshot.data().rooms);
       });
   };
 
@@ -510,6 +513,20 @@ function Card(props) {
     });
   };
 
+  const handleChangeTemperatureDevices = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setTemperatureAlarmDevices(
+      // On autofill we get a the stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+    console.log(value);
+    db.collection("Automation").doc("temperatureAlarm").update({
+      rooms: value,
+    });
+  };
+
   return (
     <div className="card">
       <img src={props.img} className="card__img" />
@@ -663,6 +680,44 @@ function Card(props) {
                     onChange={handleHigherTemperatureValue}
                   />
                 </Box>
+              </div>
+              <div className="select-lights">
+                <FormControl sx={{ m: 1, minWidth: 255 }}>
+                  <InputLabel id="demo-multiple-chip-label">
+                    Select lights
+                  </InputLabel>
+                  <Select
+                    labelId="demo-multiple-chip-label"
+                    id="demo-multiple-chip"
+                    multiple
+                    value={temperatureAlarmDevices}
+                    onChange={handleChangeTemperatureDevices}
+                    input={
+                      <OutlinedInput
+                        id="select-multiple-chip"
+                        label="Select light"
+                      />
+                    }
+                    renderValue={(selected) => (
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                        {selected.map((value) => (
+                          <Chip key={value} label={value} />
+                        ))}
+                      </Box>
+                    )}
+                    MenuProps={MenuProps}
+                  >
+                    {names.map((name) => (
+                      <MenuItem
+                        key={name}
+                        value={name}
+                        style={getStyles(name, personName, theme)}
+                      >
+                        {name}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </div>
             </div>
           </Box>

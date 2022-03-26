@@ -104,6 +104,7 @@ export default function Home() {
 
   const [lightAlarmDevices, setLightAlarmDevices] = useState([]);
   const [rainAlarmDevices, setRainAlarmDevices] = useState([]);
+  const [temperatureDevices, setTemperatureDevices] = useState([]);
 
   const [devicesInAlarm, setDevicesInAlarm] = useState([]);
   const [devicesToRemoveSelection, setDevicesToRemoveSelection] = useState([]);
@@ -115,6 +116,8 @@ export default function Home() {
 
   const [rainAlarmOn, setRainAlarmOn] = useState(false);
   const [lightAlarmOn, setLightAlarmOn] = useState(false);
+  const [temperatureAlarmOn, setTemperatureAlarmOn] = useState(false);
+
   const [alarmToRemove, setAlarmToRemove] = useState([]);
 
   useEffect(() => {
@@ -205,6 +208,7 @@ export default function Home() {
         setVisibleTemperatureAlarm(docSnapshot.data().visible);
         setLowerTemperature(docSnapshot.data().lowerValue);
         setHighTemperature(docSnapshot.data().upperValue);
+        setTemperatureDevices(docSnapshot.data().rooms);
       });
     db.collection("Automation")
       .doc("windAlarm")
@@ -309,7 +313,10 @@ export default function Home() {
         fullName = "Light alarm " + alarmsRemoved[0];
       }
       if (alarmTypeSelected === "Rain") {
-        fullName = "Rain alarm" + alarmsRemoved[0];
+        fullName = "Rain alarm " + alarmsRemoved[0];
+      }
+      if (alarmTypeSelected === "Temperature") {
+        fullName = "Temperature alarm " + alarmsRemoved[0];
       }
       setAlarmsAdded([
         ...alarmsAdded,
@@ -438,6 +445,7 @@ export default function Home() {
       setLightConfirmed(true);
     }
     var key = event.target.id;
+    console.log("Key", key);
     alarmsAdded.map((item) => {
       if (key === item.id) {
         db.collection("Automation")
@@ -445,6 +453,7 @@ export default function Home() {
           .onSnapshot((docSnapshot) => {
             setLightAlarmOn(docSnapshot.data().lightAlarm);
             setRainAlarmOn(docSnapshot.data().rainAlarm);
+            setTemperatureAlarmOn(docSnapshot.data().temperatureAlarmAlarm);
           });
         if (item.alarmType == "Light") {
           if (lightAlarmOn === true) {
@@ -467,6 +476,20 @@ export default function Home() {
           if (rainAlarmOn === false) {
             db.collection("Automation").doc(key).update({
               rainAlarm: true,
+            });
+          }
+        }
+        if (item.alarmType == "Temperature") {
+          if (temperatureAlarmOn === true) {
+            console.log("Zmena na false");
+            db.collection("Automation").doc(key).update({
+              temperatureAlarm: false,
+            });
+          }
+          if (temperatureAlarmOn === false) {
+            console.log("Zmena na true");
+            db.collection("Automation").doc(key).update({
+              temperatureAlarm: true,
             });
           }
         }
@@ -552,6 +575,7 @@ export default function Home() {
                           </MenuItem>
                           <MenuItem value={"Light"}>Light</MenuItem>
                           <MenuItem value={"Rain"}>Rain</MenuItem>
+                          <MenuItem value={"Temperature"}>Temperature</MenuItem>
                         </Select>
                       ) : null}
                     </FormControl>
@@ -638,6 +662,52 @@ export default function Home() {
                           MenuProps={MenuProps}
                         >
                           {rainAlarmDevices.map((name) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              style={getStyles(name, devicesInAlarm, theme)}
+                            >
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      ) : null}
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 255 }}>
+                      {alarmTypeSelected === "Temperature" ? (
+                        <InputLabel id="demo-multiple-chip-label">
+                          Select devices to add
+                        </InputLabel>
+                      ) : null}
+                      {alarmTypeSelected === "Temperature" ? (
+                        <Select
+                          labelId="demo-multiple-chip-label"
+                          id="demo-multiple-chip"
+                          multiple
+                          value={alarmsRemoved}
+                          onChange={handleRemoveSelectedAlarm}
+                          input={
+                            <OutlinedInput
+                              id="select-multiple-chip"
+                              label="Select rain"
+                            />
+                          }
+                          renderValue={(selected) => (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                gap: 0.5,
+                              }}
+                            >
+                              {selected.map((value) => (
+                                <Chip key={value} label={value} />
+                              ))}
+                            </Box>
+                          )}
+                          MenuProps={MenuProps}
+                        >
+                          {temperatureDevices.map((name) => (
                             <MenuItem
                               key={name}
                               value={name}

@@ -14,6 +14,10 @@ import WeatherCard from "../WeatherCard";
 
 import highTemperature from "../images/weatherImages/highTemperature.png";
 import rain from "../images/weatherIcons/Rain-4x.png";
+import pressure from "../images/weatherImages/pressure.png";
+import humidity from "../images/weatherImages/humidity.png";
+import lightIntensity from "../images/weatherImages/lightIntensity.png";
+import dust from "../images/weatherImages/dust.png";
 import { db } from "../firebase_conf";
 
 var intenzitaSvetla, prach, temperature, tlak, vlhkost, zrazky;
@@ -86,13 +90,13 @@ export default function Pocasie() {
               weather="Vlhkost"
               id="humidity"
               value={poc.vlhkost + " %"}
-              image={highTemperature}
+              image={humidity}
             />
             <WeatherCard
               weather="Tlak"
               id="pressure"
               value={poc.tlak + " ps"}
-              image={highTemperature}
+              image={pressure}
             />
             <WeatherCard
               weather="Zrazky"
@@ -104,13 +108,13 @@ export default function Pocasie() {
               weather="Intenzita svetla"
               id="clouds"
               value={poc.intenzitaSvetla + " "}
-              image={highTemperature}
+              image={lightIntensity}
             />
             <WeatherCard
               weather="Znecistenie"
               id="dust"
               value={poc.teplota + ""}
-              image={highTemperature}
+              image={dust}
             />
           </div>
           <MdChevronRight
