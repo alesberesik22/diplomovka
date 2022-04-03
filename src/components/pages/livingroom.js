@@ -1,5 +1,6 @@
 import React, { isValidElement, useEffect, useState } from "react";
 import LightControll from "../LightControll";
+import DoorSensor from "../DoorSensor";
 import "./livingroom.css";
 import "../../App.css";
 
@@ -33,9 +34,11 @@ const style = {
 export default function Livingroom() {
   const [displayLight, setDisplayLight] = useState(false);
   const [displayPlug, setDisplayPlug] = useState(false);
+  const [displayLock, setDisplayLock] = useState(false);
 
   const [sendPlugToDB, setSendPlugToDB] = useState(false);
   const [sendToDB, setSendToDB] = useState(false);
+  const [sendLockToDB, setSendLockToDB] = useState(false);
   const [removeFromDB, setRemoveFromDB] = useState(false);
 
   const [openAddModal, setOpenAddModal] = useState(false);
@@ -46,6 +49,7 @@ export default function Livingroom() {
 
   const [lightDevices, setLightDevices] = useState([{}]);
   const [plugDevices, setPlugDevices] = useState([{}]);
+  const [lockDevices, setLockDevices] = useState([{}]);
   const [devices, setDevices] = useState([]);
   const [allDevices, setAllDevices] = useState([{}]);
 
@@ -64,6 +68,11 @@ export default function Livingroom() {
       .doc("livingroom")
       .onSnapshot((docSnapshot) => {
         setPlugDevices(docSnapshot.data().listPlug);
+      });
+    db.collection("Automation")
+      .doc("livingroom")
+      .onSnapshot((docSnapshot) => {
+        setLockDevices(docSnapshot.data().lockList);
       });
     db.collection("Automation")
       .doc("livingroom")
@@ -106,6 +115,9 @@ export default function Livingroom() {
         if (docSnapshot.data().deviceType === "Plug") {
           setDisplayPlug(true);
         }
+        if (docSnapshot.data().deviceType === "Door lock") {
+          setDisplayLock(true);
+        }
       });
   };
 
@@ -126,6 +138,13 @@ export default function Livingroom() {
       );
       setRemoveFromDB(true);
     }
+    if (lockDevices.some((name) => name.doc.includes(deviceSelectedToRemove))) {
+      console.log("ano");
+      setPlugDevices(
+        lockDevices.filter((item) => item.doc !== deviceSelectedToRemove)
+      );
+      setRemoveFromDB(true);
+    }
   };
 
   useEffect(() => {
@@ -133,6 +152,7 @@ export default function Livingroom() {
       db.collection("Automation").doc("livingroom").set({
         list: lightDevices,
         listPlug: plugDevices,
+        lockList: lockDevices,
       });
     }
     setRemoveFromDB(false);
@@ -213,10 +233,40 @@ export default function Livingroom() {
   }, [displayPlug]);
 
   useEffect(() => {
+    if (displayLock === true) {
+      db.collection("Automation")
+        .doc(deviceSelectedToAdd)
+        .onSnapshot((docSnapshot) => {
+          if (lockDevices[0].doc === undefined) {
+            setLockDevices([
+              {
+                doc: docSnapshot.data().doc,
+                id: docSnapshot.data().id,
+                locked: docSnapshot.data().locked,
+              },
+            ]);
+          } else {
+            setLockDevices([
+              ...lockDevices,
+              {
+                doc: docSnapshot.data().doc,
+                id: docSnapshot.data().id,
+                locked: docSnapshot.data().locked,
+              },
+            ]);
+          }
+        });
+    }
+    setSendLockToDB(true);
+    setDisplayLock(false);
+  }, [displayLock]);
+
+  useEffect(() => {
     if (sendPlugToDB === true) {
       db.collection("Automation").doc("livingroom").set({
         list: lightDevices,
         listPlug: plugDevices,
+        lockList: lockDevices,
       });
     }
     setSendPlugToDB(false);
@@ -227,10 +277,22 @@ export default function Livingroom() {
       db.collection("Automation").doc("livingroom").set({
         list: lightDevices,
         listPlug: plugDevices,
+        lockList: lockDevices,
       });
     }
     setSendToDB(false);
   }, [sendToDB]);
+
+  useEffect(() => {
+    if (sendLockToDB === true) {
+      db.collection("Automation").doc("livingroom").set({
+        list: lightDevices,
+        listPlug: plugDevices,
+        lockList: lockDevices,
+      });
+    }
+    setSendLockToDB(false);
+  }, [sendLockToDB]);
 
   useEffect(() => {
     getDevices();
@@ -269,6 +331,9 @@ export default function Livingroom() {
                   <MenuItem value={device.doc}>{device.id}</MenuItem>
                 ))}
                 {lightDevices.map((device) => (
+                  <MenuItem value={device.doc}>{device.id}</MenuItem>
+                ))}
+                {lockDevices.map((device) => (
                   <MenuItem value={device.doc}>{device.id}</MenuItem>
                 ))}
               </Select>
@@ -324,6 +389,19 @@ export default function Livingroom() {
                   collection="Automation"
                   name={device.id}
                 ></Plug>
+              </div>
+            );
+          })
+        : null}
+      {lockDevices[0].doc !== undefined
+        ? lockDevices.map((device) => {
+            return (
+              <div className="lightCardsFloat">
+                <DoorSensor
+                  doc={device.doc}
+                  collection="Automation"
+                  name={device.id}
+                />
               </div>
             );
           })
