@@ -122,28 +122,28 @@ export default function Home() {
 
   useEffect(() => {
     getDoorInfo();
-    getAutomationInfo();
     getWeather();
     getNotificationInfo();
     getAlarmList();
     getAllDevices();
+    getAutomationInfo();
   }, []); //blank to run only on first launch
 
   useEffect(() => {
     //var handle = setInterval(getDoorInfo, 6000);
-    var handle2 = setInterval(getAutomationInfo, 6000);
     //var handle3 = setInterval(getWeather, 1000);
     //var handle4 = setInterval(getNotificationInfo, 6000);
-    var handle5 = setInterval(getAlarmList, 6000);
-    var handle6 = setInterval(getAllDevices, 6000);
+    //var handle5 = setInterval(getAlarmList, 6000);
+    //var handle6 = setInterval(getAllDevices, 6000);
+    //var handle2 = setInterval(getAutomationInfo, 6000);
 
     return () => {
       //clearInterval(handle);
-      clearInterval(handle2);
+      //clearInterval(handle2);
       //clearInterval(handle3);
       //clearInterval(handle4);
-      clearInterval(handle5);
-      clearInterval(handle6);
+      //clearInterval(handle5);
+      //clearInterval(handle6);
     };
   });
 
@@ -219,7 +219,7 @@ export default function Home() {
       });
   };
   const getNotificationInfo = () => {
-    if (zrazky < 100) {
+    if (zrazky >= 1000) {
       setLightConfirmed(false);
       setVisibleLightAlarm(false);
       db.collection("Automation").doc("rainAlarm").update({
@@ -227,43 +227,47 @@ export default function Home() {
         confirmed: false,
       });
     }
-    if (intenzitaSvetla < lightAlarmValue) {
-      setVisibleLightAlarm(false);
-      setLightConfirmed(false);
-      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
-        visible: false,
-        confirmed: false,
-      });
-    }
-    if (
-      intenzitaSvetla > lightAlarmValue &&
-      checked === true &&
-      lightConfirmed === false
-    ) {
-      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
-        visible: true,
-      });
-      setVisibleLightAlarm(true);
-    }
-    if (
-      intenzitaSvetla > lightAlarmValue &&
-      checked === true &&
-      lightConfirmed === true
-    ) {
-      setVisibleLightAlarm(false);
-      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
-        visible: false,
-      });
-    }
-    if (zrazky > 100 && checked2 == true && rainConfirmed == false) {
+    // if (intenzitaSvetla < lightAlarmValue) {
+    //   setVisibleLightAlarm(false);
+    //   setLightConfirmed(false);
+    //   db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+    //     visible: false,
+    //     confirmed: false,
+    //   });
+    // }
+    // if (
+    //   intenzitaSvetla > lightAlarmValue &&
+    //   checked === true &&
+    //   lightConfirmed === false
+    // ) {
+    //   db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+    //     visible: true,
+    //   });
+    //   setVisibleLightAlarm(true);
+    // }
+    // if (
+    //   intenzitaSvetla > lightAlarmValue &&
+    //   checked === true &&
+    //   lightConfirmed === true
+    // ) {
+    //   setVisibleLightAlarm(false);
+    //   db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+    //     visible: false,
+    //   });
+    // }
+    console.log("zrazky", zrazky);
+    console.log("rain confirmed", rainConfirmed);
+    if (zrazky < 1000 && rainConfirmed === false) {
       db.collection("Automation").doc("rainAlarm").update({
         visible: true,
       });
       setVisibleRainAlarm(true);
     }
-    if (zrazky > 100 && checked2 == true && rainConfirmed == true) {
+    if (zrazky < 1000 && rainConfirmed === true) {
+      console.log("zrazkyposledne");
       db.collection("Automation").doc("rainAlarm").update({
         visible: false,
+        confirmed: false,
       });
       setVisibleRainAlarm(false);
     }
@@ -429,18 +433,21 @@ export default function Home() {
     if (event.target.id == "B8") {
       db.collection("Automation").doc("rainAlarm").update({
         confirmed: true,
+        visible: false,
       });
       setRainConfirmed(true);
     }
     if (event.target.id == "B7") {
       db.collection("Automation").doc("windAlarm").update({
         confirmed: true,
+        visible: false,
       });
       setWindConfirmed(true);
     }
     if (event.target.id == "B6") {
       db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
         confirmed: true,
+        visible: false,
       });
       setLightConfirmed(true);
     }
@@ -488,6 +495,7 @@ export default function Home() {
           }
           if (temperatureAlarmOn === false) {
             console.log("Zmena na true");
+            console.log("Kluc", key);
             db.collection("Automation").doc(key).update({
               temperatureAlarm: true,
             });
@@ -788,7 +796,7 @@ export default function Home() {
                   </div>
                 </Box>
               </Modal>
-              <div className="automation-element-text">
+              <div className="">
                 <div
                   className="automation-list-element"
                   style={{ backgroundColor: backgroundColor }}

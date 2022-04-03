@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 import { AnimatePresence } from "framer-motion";
+import "font-awesome/css/font-awesome.min.css";
 
 import "./App.css";
 
@@ -40,41 +41,72 @@ function App() {
       );
       console.log("Reload every 10sec");
       console.log(userPosts.data.feeds[0]);
-      prach = userPosts.data.feeds[0].field5;
-      teplota = userPosts.data.feeds[0].field1;
-      vlhkost = userPosts.data.feeds[0].field2;
-      intenzitaSvetla = userPosts.data.feeds[0].field3;
-      zrazky = userPosts.data.feeds[0].field4;
-      tlak = userPosts.data.feeds[0].field6;
-      if (teplota != null) {
-        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
-          vlhkost: vlhkost,
-        });
-      }
-      if (vlhkost != null) {
-        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
-          teplota: teplota,
-        });
-      }
-      if (intenzitaSvetla != null) {
-        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
-          intenzitaSvetla: intenzitaSvetla,
-        });
-      }
-      if (zrazky != null) {
-        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
-          zrazky: zrazky,
-        });
-      }
-      if (prach != null) {
+      if (
+        userPosts.data.feeds[0].field5 !== null &&
+        prach !== userPosts.data.feeds[0].field5
+      ) {
+        prach = userPosts.data.feeds[0].field5;
+        console.log(prach);
         db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
           prach: prach,
         });
       }
-      if (tlak != null) {
+      if (
+        userPosts.data.feeds[0].field1 !== null &&
+        teplota !== userPosts.data.feeds[0].field1
+      ) {
+        teplota = userPosts.data.feeds[0].field1;
+        console.log(teplota);
+        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
+          teplota: teplota,
+        });
+      }
+      if (
+        userPosts.data.feeds[0].field2 !== null &&
+        vlhkost !== userPosts.data.feeds[0].field2
+      ) {
+        vlhkost = userPosts.data.feeds[0].field2;
+        console.log(vlhkost);
+        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
+          vlhkost: vlhkost,
+        });
+      }
+      if (
+        userPosts.data.feeds[0].field3 !== null &&
+        intenzitaSvetla !== userPosts.data.feeds[0].field4
+      ) {
+        intenzitaSvetla = userPosts.data.feeds[0].field4;
+        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
+          intenzitaSvetla: intenzitaSvetla,
+        });
+      }
+      if (
+        userPosts.data.feeds[0].field4 !== null &&
+        zrazky !== userPosts.data.feeds[0].field3
+      ) {
+        zrazky = userPosts.data.feeds[0].field3;
+        console.log(zrazky);
+        db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
+          zrazky: zrazky,
+        });
+      }
+      if (
+        userPosts.data.feeds[0].field6 !== null &&
+        tlak !== userPosts.data.feeds[0].field6
+      ) {
+        tlak = userPosts.data.feeds[0].field6;
         db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").update({
           tlak: tlak,
         });
+      }
+
+      if (intenzitaSvetla != null) {
+      }
+      if (zrazky != null) {
+      }
+      if (prach != null) {
+      }
+      if (tlak != null) {
       }
 
       localStorage.setItem("temperature", prach);
@@ -87,7 +119,7 @@ function App() {
     getPosts();
     const interval = setInterval(() => {
       getPosts();
-    }, 10000);
+    }, 2000);
 
     return () => clearImmediate(interval);
   });
@@ -112,7 +144,7 @@ function App() {
           <Route path="/kitchen" exact component={kitchen} />
           <Route path="/bathroom" exact component={bathroom} />
           <Route path="/ToDo" exact component={ToDo} />
-          <Route path="/Settings" exact component={Settings} />
+          <Route path="/Settings" exact component={Settings2} />
           <Route path="/teplota" exact component={Temperature} />
           <Route path="/settings2" exact component={Settings2} />
         </Switch>

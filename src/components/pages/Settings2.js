@@ -246,7 +246,7 @@ function Card(props) {
         db.collection("Automation").doc(String(zigbeeCode)).set({
           deviceType: deviceTypeSelected,
           id: zigbeeName,
-          off: true,
+          locked: true,
           doc: zigbeeCode,
           room: "none",
         });
