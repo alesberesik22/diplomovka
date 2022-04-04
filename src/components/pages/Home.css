@@ -257,5 +257,22 @@ gridContainer {
     top: 98.5rem;
   }
 }
-@media (max-width: 1200px) {
+@media (min-width: 400px) and (max-width: 1024px) {
+  .automation-list {
+    left: 32rem;
+    top: 25rem;
+  }
+  .door-check-card {
+    top: 35rem;
+    left: 101px;
+  }
+  .notifications-card {
+    top: 44rem;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1600px) {
+  .automation-list {
+    top: 13rem;
+    left: 53rem;
+  }
 }
