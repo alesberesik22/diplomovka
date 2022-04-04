@@ -257,7 +257,7 @@ gridContainer {
     top: 98.5rem;
   }
 }
-@media (min-width: 400px) and (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {
   .automation-list {
     left: 32rem;
     top: 25rem;
