@@ -1,11 +1,11 @@
-.body {
+/* .body {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-}
+} */
 
 gridContainer {
   paddingleft: "40px";
@@ -27,14 +27,13 @@ gridContainer {
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   /* background-color: rgba(0, 0, 0, 0.1); */
   /* position: relative; */
-  display: flex;
-  align-items: center;
 }
 
 .karty {
-  position: relative;
-  top: 21rem;
+  /* position: relative; */
   margin-left: 110px;
+  margin-bottom: 20px;
+  margin-right: 20px;
   /* left: 300px; */
   width: 23.75rem;
   height: 500px;
@@ -46,21 +45,25 @@ gridContainer {
   /* box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.3); */
   /* cursor: pointer; */
   /* dis: center; */
+  /* float: left; */
 }
 .karta2 {
   /* margin-top: -500px; */
-  position: relative;
-  top: -11rem;
-  margin-top: 15px;
-  left: 530px;
+  /* position: relative; */
+  /* top: -7.4rem; */
+  /* margin-top: 15px; */
+  /* left: 530px; */
+  position: absolute;
+  left: 32rem;
+  top: 3.2rem;
   width: 300px;
   height: 150px;
+  /* float: left; */
 }
 .automation-list {
-  position: relative;
-  top: -8rem;
-  margin-top: 15px;
-  left: 33rem;
+  position: absolute;
+  top: 3.2rem;
+  left: 79rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -88,12 +91,11 @@ gridContainer {
   margin-top: -3rem;
 }
 .notifications-card {
-  position: relative;
-  top: -20rem;
-  left: 7rem;
+  position: absolute;
+  top: 36rem;
   display: flex;
   flex-direction: column;
-  /* margin: auto; */
+  margin-left: 118px;
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 10px;
@@ -103,6 +105,7 @@ gridContainer {
   font-family: "Montserrat", sans-serif;
   flex-shrink: 0;
   list-style-type: none;
+  /* float: left; */
 }
 .notification-icon {
   font-size: 1.4rem;
@@ -111,21 +114,20 @@ gridContainer {
 }
 .door-check-card {
   position: absolute;
-  /* top: -56.1rem; */
-  top: 10rem;
-  left: 53.5rem;
+  left: 52rem;
+  top: 3.2rem;
   display: flex;
   flex-direction: column;
-  /* margin: auto; */
   align-items: center;
   box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.1);
+  margin-left: 20px;
   padding: 20px 10px;
   border-radius: 10px;
   width: 23.75rem;
   background: white;
   font-family: "Montserrat", sans-serif;
-  flex-shrink: 0;
   list-style-type: none;
+  /* float: left; */
 }
 .door-status {
   margin-top: 1rem;
@@ -143,8 +145,8 @@ gridContainer {
 }
 .electricity-card {
   position: absolute;
-  top: 21rem;
-  left: 58rem;
+  top: 14.4rem;
+  left: 32rem;
   display: flex;
   flex-direction: column;
   /* margin: auto; */
@@ -157,6 +159,7 @@ gridContainer {
   font-family: "Montserrat", sans-serif;
   flex-shrink: 0;
   list-style-type: none;
+  /* float: left; */
 }
 .electricity-status {
   margin-top: 1rem;
@@ -176,9 +179,9 @@ gridContainer {
   color: #1888ff;
 }
 .add-Automation-list {
-  position: absolute;
-  top: 2rem;
-  left: 1.5rem;
+  position: relative;
+  /* top: 2rem; */
+  /* left: 1.5rem; */
 }
 .select-device-type {
   position: relative;
@@ -213,14 +216,46 @@ gridContainer {
   height: 3.5rem;
   width: 100%;
 }
-@media (max-width: 767px) {
-  .notifications-card {
-    position: relative;
+@media (max-width: 768px) {
+  /* .notifications-card {
     top: -17rem;
-  }
-  .automation-list {
-    position: relative;
+  } */
+  /* .automation-list {
     left: 6.5rem;
     top: 28rem;
+  } */
+  .karty {
+    margin-left: 50px;
   }
+  .karta2 {
+    left: 0;
+    margin-left: 50px;
+    top: 36rem;
+  }
+  .notifications-card {
+    top: -5rem;
+    margin-left: 50px;
+  }
+  .door-check-card {
+    left: 0;
+    margin-left: 50px;
+    top: 47.5rem;
+  }
+  .electricity-card {
+    left: 0;
+    margin-left: 50px;
+    top: 56.5rem;
+  }
+  .automation-list {
+    left: 0;
+    margin-left: 50px;
+    top: 66.5rem;
+  }
+  .notifications-card {
+    left: 0;
+    margin-left: 50px;
+    top: 98.5rem;
+  }
+}
+@media (max-width: 1200px) {
 }

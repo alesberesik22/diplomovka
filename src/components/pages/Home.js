@@ -516,398 +516,396 @@ export default function Home() {
     >
       <div className="body">
         <div className="home-container">
-          <div id="">
-            <div className="karty">
-              <WeatherDashCard />
+          <div className="karty">
+            <WeatherDashCard />
+          </div>
+          <div className="karta2">
+            <ValueSider />
+          </div>
+          <div className="automation-list">
+            <h1>Automation list</h1>
+            <div
+              className="add-Automation-list"
+              id="addRemoveAutomationList"
+              onClick={handleAddAutomationList}
+            >
+              <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
             </div>
-            <div className="karta2">
-              <ValueSider />
-            </div>
-            <div className="automation-list">
-              <h1>Automation list</h1>
-              <div
-                className="add-Automation-list"
-                id="addRemoveAutomationList"
-                onClick={handleAddAutomationList}
-              >
-                <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
-              </div>
 
-              <Modal
-                open={automationListModal}
-                onClose={handleCloseModal}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <div className="select-automation-list-label">
-                    <p style={{ width: "400px" }}>
-                      Add or remove elements to list
-                    </p>
-                  </div>
-                  <div className="add-remove-Automtion-list">
-                    <Stack spacing={2} direction="row">
-                      <Button
-                        variant="contained"
-                        id="addToAlarmList"
-                        onClick={handleAddAutomationList}
-                      >
-                        Add
-                      </Button>
-                      <Button
-                        variant="contained"
-                        id="removeFromAlarmButton"
-                        onClick={handleAddAutomationList}
-                      >
-                        Remove
-                      </Button>
-                    </Stack>
-                  </div>
-                  <div className="select-device-type">
-                    <FormControl sx={{ m: 1, minWidth: 200 }}>
-                      {addToAlarmList ? (
-                        <InputLabel id="demo-simple-select-helper-label">
-                          Select device type
-                        </InputLabel>
-                      ) : null}
-                      {addToAlarmList ? (
-                        <Select
-                          labelId="demo-simple-select-helper-label"
-                          id="demo-simple-select-helper"
-                          value={alarmTypeSelected}
-                          label="Age"
-                          onChange={handleAlarmTypeSelected}
-                        >
-                          <MenuItem value="">
-                            <em>None</em>
-                          </MenuItem>
-                          <MenuItem value={"Light"}>Light</MenuItem>
-                          <MenuItem value={"Rain"}>Rain</MenuItem>
-                          <MenuItem value={"Temperature"}>Temperature</MenuItem>
-                        </Select>
-                      ) : null}
-                    </FormControl>
-                  </div>
-                  <div className="add-devices">
-                    <FormControl sx={{ m: 1, minWidth: 255 }}>
-                      {alarmTypeSelected === "Light" ? (
-                        <InputLabel id="demo-multiple-chip-label">
-                          Select devices to add
-                        </InputLabel>
-                      ) : null}
-                      {alarmTypeSelected === "Light" ? (
-                        <Select
-                          labelId="demo-multiple-chip-label"
-                          id="demo-multiple-chip"
-                          multiple
-                          value={alarmsRemoved}
-                          onChange={handleRemoveSelectedAlarm}
-                          input={
-                            <OutlinedInput
-                              id="select-multiple-chip"
-                              label="Select light"
-                            />
-                          }
-                          renderValue={(selected) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {selected.map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {lightAlarmDevices.map((name) => (
-                            <MenuItem
-                              key={name}
-                              value={name}
-                              style={getStyles(name, devicesInAlarm, theme)}
-                            >
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      ) : null}
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 255 }}>
-                      {alarmTypeSelected === "Rain" ? (
-                        <InputLabel id="demo-multiple-chip-label">
-                          Select devices to add
-                        </InputLabel>
-                      ) : null}
-                      {alarmTypeSelected === "Rain" ? (
-                        <Select
-                          labelId="demo-multiple-chip-label"
-                          id="demo-multiple-chip"
-                          multiple
-                          value={alarmsRemoved}
-                          onChange={handleRemoveSelectedAlarm}
-                          input={
-                            <OutlinedInput
-                              id="select-multiple-chip"
-                              label="Select rain"
-                            />
-                          }
-                          renderValue={(selected) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {selected.map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {rainAlarmDevices.map((name) => (
-                            <MenuItem
-                              key={name}
-                              value={name}
-                              style={getStyles(name, devicesInAlarm, theme)}
-                            >
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      ) : null}
-                    </FormControl>
-                    <FormControl sx={{ m: 1, minWidth: 255 }}>
-                      {alarmTypeSelected === "Temperature" ? (
-                        <InputLabel id="demo-multiple-chip-label">
-                          Select devices to add
-                        </InputLabel>
-                      ) : null}
-                      {alarmTypeSelected === "Temperature" ? (
-                        <Select
-                          labelId="demo-multiple-chip-label"
-                          id="demo-multiple-chip"
-                          multiple
-                          value={alarmsRemoved}
-                          onChange={handleRemoveSelectedAlarm}
-                          input={
-                            <OutlinedInput
-                              id="select-multiple-chip"
-                              label="Select rain"
-                            />
-                          }
-                          renderValue={(selected) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {selected.map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {temperatureDevices.map((name) => (
-                            <MenuItem
-                              key={name}
-                              value={name}
-                              style={getStyles(name, devicesInAlarm, theme)}
-                            >
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      ) : null}
-                    </FormControl>
-                    {addToAlarmList ? (
-                      <Button
-                        variant="contained"
-                        id="confirmAdd"
-                        onClick={handleAddAutomationList}
-                      >
-                        Confirm
-                      </Button>
-                    ) : null}
-                  </div>
-                  <div className="add-devices">
-                    <FormControl sx={{ m: 1, minWidth: 255 }}>
-                      {removeFromAlarmList ? (
-                        <InputLabel id="demo-multiple-chip-label">
-                          Select devices to remove
-                        </InputLabel>
-                      ) : null}
-                      {removeFromAlarmList ? (
-                        <Select
-                          labelId="demo-multiple-chip-label"
-                          id="demo-multiple-chip"
-                          multiple
-                          value={alarmToRemove}
-                          onChange={handleAlarmsToRemove}
-                          input={
-                            <OutlinedInput
-                              id="select-multiple-chip"
-                              label="Select light"
-                            />
-                          }
-                          renderValue={(selected) => (
-                            <Box
-                              sx={{
-                                display: "flex",
-                                flexWrap: "wrap",
-                                gap: 0.5,
-                              }}
-                            >
-                              {selected.map((value) => (
-                                <Chip key={value} label={value} />
-                              ))}
-                            </Box>
-                          )}
-                          MenuProps={MenuProps}
-                        >
-                          {allDevices.map((name) => (
-                            <MenuItem
-                              key={name}
-                              value={name}
-                              style={getStyles(name, devicesInAlarm, theme)}
-                            >
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      ) : null}
-                    </FormControl>
-                    {removeFromAlarmList ? (
-                      <Button
-                        variant="contained"
-                        id="removeDeviceFromAlarmList"
-                        onClick={handleAddAutomationList}
-                      >
-                        Confirm
-                      </Button>
-                    ) : null}
-                  </div>
-                </Box>
-              </Modal>
-              <div className="">
-                <div
-                  className="automation-list-element"
-                  style={{ backgroundColor: backgroundColor }}
-                >
-                  Auto lights
-                  <Button id="B1" color="secondary" onClick={handleClick}>
-                    {checked ? "ON" : "OFF"}
-                  </Button>
+            <Modal
+              open={automationListModal}
+              onClose={handleCloseModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <div className="select-automation-list-label">
+                  <p style={{ width: "400px" }}>
+                    Add or remove elements to list
+                  </p>
                 </div>
-                <div
-                  className="automation-list-element"
-                  style={{ backgroundColor: backgroundColor2 }}
-                >
-                  Rain alarm
-                  <Button id="B2" color="secondary" onClick={handleClick}>
-                    {checked2 ? "ON" : "OFF"}
-                  </Button>
-                </div>
-                <div
-                  className="automation-list-element"
-                  style={{ backgroundColor: backgroundColor3 }}
-                >
-                  Temperature alarm
-                  <Button id="B3" color="secondary" onClick={handleClick}>
-                    {checked3 ? "ON" : "OFF"}
-                  </Button>
-                </div>
-                <div
-                  className="automation-list-element"
-                  style={{ backgroundColor: backgroundColor4 }}
-                >
-                  Wind alarm
-                  <Button id="B4" color="secondary" onClick={handleClick}>
-                    {checked4 ? "ON" : "OFF"}
-                  </Button>
-                </div>
-                {alarmsAdded.map((x, i) => {
-                  return (
-                    <div
-                      className="automation-list-element"
-                      style={{ backgroundColor: backgroundColor4 }}
+                <div className="add-remove-Automtion-list">
+                  <Stack spacing={2} direction="row">
+                    <Button
+                      variant="contained"
+                      id="addToAlarmList"
+                      onClick={handleAddAutomationList}
                     >
-                      {x.name}
-                      <Button id={x.id} color="secondary" onClick={handleClick}>
-                        {checked4 ? "ON" : "OFF"}
-                      </Button>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-            <div className="notifications-card">
-              <h1 style={{ fontSize: "1.3rem" }}>Notifications</h1>
-              <div className="notification-icon">
-                <i class="far fa-bell"></i>
-              </div>
-              {visibleRainAlarm && (
-                <div className="rain-notification">
-                  Rain alert
-                  <Button id="B8" color="secondary" onClick={handleClick}>
-                    {"ACK"}
-                  </Button>
+                      Add
+                    </Button>
+                    <Button
+                      variant="contained"
+                      id="removeFromAlarmButton"
+                      onClick={handleAddAutomationList}
+                    >
+                      Remove
+                    </Button>
+                  </Stack>
                 </div>
-              )}
-              {visibleTemperatureAlarm && (
-                <div className="temperature-notification">
-                  Temperature alert
-                  <Button id="B9" color="secondary" onClick={handleClick}>
-                    {"ACK"}
-                  </Button>
+                <div className="select-device-type">
+                  <FormControl sx={{ m: 1, minWidth: 200 }}>
+                    {addToAlarmList ? (
+                      <InputLabel id="demo-simple-select-helper-label">
+                        Select device type
+                      </InputLabel>
+                    ) : null}
+                    {addToAlarmList ? (
+                      <Select
+                        labelId="demo-simple-select-helper-label"
+                        id="demo-simple-select-helper"
+                        value={alarmTypeSelected}
+                        label="Age"
+                        onChange={handleAlarmTypeSelected}
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={"Light"}>Light</MenuItem>
+                        <MenuItem value={"Rain"}>Rain</MenuItem>
+                        <MenuItem value={"Temperature"}>Temperature</MenuItem>
+                      </Select>
+                    ) : null}
+                  </FormControl>
                 </div>
-              )}
-              {visibleWindAlarm && (
-                <div className="wind-notification">
-                  Wind alert
-                  <Button id="B7" color="secondary" onClick={handleClick}>
-                    {"ACK"}
-                  </Button>
+                <div className="add-devices">
+                  <FormControl sx={{ m: 1, minWidth: 255 }}>
+                    {alarmTypeSelected === "Light" ? (
+                      <InputLabel id="demo-multiple-chip-label">
+                        Select devices to add
+                      </InputLabel>
+                    ) : null}
+                    {alarmTypeSelected === "Light" ? (
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={alarmsRemoved}
+                        onChange={handleRemoveSelectedAlarm}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Select light"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {lightAlarmDevices.map((name) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, devicesInAlarm, theme)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : null}
+                  </FormControl>
+                  <FormControl sx={{ m: 1, minWidth: 255 }}>
+                    {alarmTypeSelected === "Rain" ? (
+                      <InputLabel id="demo-multiple-chip-label">
+                        Select devices to add
+                      </InputLabel>
+                    ) : null}
+                    {alarmTypeSelected === "Rain" ? (
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={alarmsRemoved}
+                        onChange={handleRemoveSelectedAlarm}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Select rain"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {rainAlarmDevices.map((name) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, devicesInAlarm, theme)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : null}
+                  </FormControl>
+                  <FormControl sx={{ m: 1, minWidth: 255 }}>
+                    {alarmTypeSelected === "Temperature" ? (
+                      <InputLabel id="demo-multiple-chip-label">
+                        Select devices to add
+                      </InputLabel>
+                    ) : null}
+                    {alarmTypeSelected === "Temperature" ? (
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={alarmsRemoved}
+                        onChange={handleRemoveSelectedAlarm}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Select rain"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {temperatureDevices.map((name) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, devicesInAlarm, theme)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : null}
+                  </FormControl>
+                  {addToAlarmList ? (
+                    <Button
+                      variant="contained"
+                      id="confirmAdd"
+                      onClick={handleAddAutomationList}
+                    >
+                      Confirm
+                    </Button>
+                  ) : null}
                 </div>
-              )}
-              {visibleLightAlarm && (
-                <div className="light-notification">
-                  Light alert
-                  <Button id="B6" color="secondary" onClick={handleClick}>
-                    {"ACK"}
-                  </Button>
+                <div className="add-devices">
+                  <FormControl sx={{ m: 1, minWidth: 255 }}>
+                    {removeFromAlarmList ? (
+                      <InputLabel id="demo-multiple-chip-label">
+                        Select devices to remove
+                      </InputLabel>
+                    ) : null}
+                    {removeFromAlarmList ? (
+                      <Select
+                        labelId="demo-multiple-chip-label"
+                        id="demo-multiple-chip"
+                        multiple
+                        value={alarmToRemove}
+                        onChange={handleAlarmsToRemove}
+                        input={
+                          <OutlinedInput
+                            id="select-multiple-chip"
+                            label="Select light"
+                          />
+                        }
+                        renderValue={(selected) => (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexWrap: "wrap",
+                              gap: 0.5,
+                            }}
+                          >
+                            {selected.map((value) => (
+                              <Chip key={value} label={value} />
+                            ))}
+                          </Box>
+                        )}
+                        MenuProps={MenuProps}
+                      >
+                        {allDevices.map((name) => (
+                          <MenuItem
+                            key={name}
+                            value={name}
+                            style={getStyles(name, devicesInAlarm, theme)}
+                          >
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    ) : null}
+                  </FormControl>
+                  {removeFromAlarmList ? (
+                    <Button
+                      variant="contained"
+                      id="removeDeviceFromAlarmList"
+                      onClick={handleAddAutomationList}
+                    >
+                      Confirm
+                    </Button>
+                  ) : null}
                 </div>
-              )}
-            </div>
-            <div className="door-check-card">
-              <h1 style={{ fontSize: "1.4rem" }}>Home door check</h1>
-              <div className="door-status">Status of the door: </div>
-              <div className="automation-element-toggle">
-                <UseAnimations
-                  animation={lock}
-                  size={40}
-                  style={{ padding: 100 }}
-                />
+              </Box>
+            </Modal>
+            <div className="">
+              <div
+                className="automation-list-element"
+                style={{ backgroundColor: backgroundColor }}
+              >
+                Auto lights
+                <Button id="B1" color="secondary" onClick={handleClick}>
+                  {checked ? "ON" : "OFF"}
+                </Button>
               </div>
-              <div className="diplay-lock-value">
-                {doorLock ? "locked" : "unlocked"}
+              <div
+                className="automation-list-element"
+                style={{ backgroundColor: backgroundColor2 }}
+              >
+                Rain alarm
+                <Button id="B2" color="secondary" onClick={handleClick}>
+                  {checked2 ? "ON" : "OFF"}
+                </Button>
               </div>
-            </div>
-            <div className="electricity-card">
-              <h1 style={{ fontSize: "1.4rem" }}>Living room electricity</h1>
-              <div className="electricity-logo">
-                <i class="fas fa-bolt"></i>
+              <div
+                className="automation-list-element"
+                style={{ backgroundColor: backgroundColor3 }}
+              >
+                Temperature alarm
+                <Button id="B3" color="secondary" onClick={handleClick}>
+                  {checked3 ? "ON" : "OFF"}
+                </Button>
               </div>
-              <div className="electricity-status">Electricity usage: </div>
-              <div className="diplay-electricity-value">{electricity}</div>
+              <div
+                className="automation-list-element"
+                style={{ backgroundColor: backgroundColor4 }}
+              >
+                Wind alarm
+                <Button id="B4" color="secondary" onClick={handleClick}>
+                  {checked4 ? "ON" : "OFF"}
+                </Button>
+              </div>
+              {alarmsAdded.map((x, i) => {
+                return (
+                  <div
+                    className="automation-list-element"
+                    style={{ backgroundColor: backgroundColor4 }}
+                  >
+                    {x.name}
+                    <Button id={x.id} color="secondary" onClick={handleClick}>
+                      {checked4 ? "ON" : "OFF"}
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
+          </div>
+          <div className="notifications-card">
+            <h1 style={{ fontSize: "1.3rem" }}>Notifications</h1>
+            <div className="notification-icon">
+              <i class="far fa-bell"></i>
+            </div>
+            {visibleRainAlarm && (
+              <div className="rain-notification">
+                Rain alert
+                <Button id="B8" color="secondary" onClick={handleClick}>
+                  {"ACK"}
+                </Button>
+              </div>
+            )}
+            {visibleTemperatureAlarm && (
+              <div className="temperature-notification">
+                Temperature alert
+                <Button id="B9" color="secondary" onClick={handleClick}>
+                  {"ACK"}
+                </Button>
+              </div>
+            )}
+            {visibleWindAlarm && (
+              <div className="wind-notification">
+                Wind alert
+                <Button id="B7" color="secondary" onClick={handleClick}>
+                  {"ACK"}
+                </Button>
+              </div>
+            )}
+            {visibleLightAlarm && (
+              <div className="light-notification">
+                Light alert
+                <Button id="B6" color="secondary" onClick={handleClick}>
+                  {"ACK"}
+                </Button>
+              </div>
+            )}
+          </div>
+          <div className="door-check-card">
+            <h1 style={{ fontSize: "1.4rem" }}>Home door check</h1>
+            <div className="door-status">Status of the door: </div>
+            <div className="automation-element-toggle">
+              <UseAnimations
+                animation={lock}
+                size={40}
+                style={{ padding: 100 }}
+              />
+            </div>
+            <div className="diplay-lock-value">
+              {doorLock ? "locked" : "unlocked"}
+            </div>
+          </div>
+          <div className="electricity-card">
+            <h1 style={{ fontSize: "1.4rem" }}>Living room electricity</h1>
+            <div className="electricity-logo">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <div className="electricity-status">Electricity usage: </div>
+            <div className="diplay-electricity-value">{electricity}</div>
           </div>
         </div>
       </div>
