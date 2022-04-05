@@ -30,7 +30,7 @@
 .nav-menu {
   box-shadow: rgba(248, 249, 251, 255);
   display: grid;
-  grid-template-columns: repeat(5, auto);
+  grid-template-columns: repeat(6, auto);
   grid-gap: 10px;
   list-style: none;
   text-align: center;

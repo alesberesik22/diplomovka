@@ -47,7 +47,7 @@ export default function Pocasie() {
   //**************************************************************novy useEffect()*******************************************************************************
   useEffect(() => {
     getWeather();
-  }); //blank to run only on first launch
+  }, []); //blank to run only on first launch
   //**************************************************************stary useEffect()******************************************************************************
   // useEffect(() => {
   //   temperature = localStorage.getItem("temperature");

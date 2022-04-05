@@ -135,15 +135,15 @@ export default function Home() {
   useEffect(() => {
     console.log("Som tu ");
     getNotificaionRainInfo();
-  },[zrazky])
+  }, [zrazky]);
 
-  useEffect(()=> {
+  useEffect(() => {
     getNotificationsLightInfo();
-  },[intenzitaSvetla])
+  }, [intenzitaSvetla]);
 
-  useEffect(()=> {
+  useEffect(() => {
     getNotificationTemperatureInfo();
-  },[teplota])
+  }, [teplota]);
 
   useEffect(() => {
     //var handle = setInterval(getDoorInfo, 6000);
@@ -260,23 +260,20 @@ export default function Home() {
       });
       setVisibleRainAlarm(false);
     }
-  }
+  };
 
   const getNotificationsLightInfo = () => {
-    if(intenzitaSvetla > lightAlarmValue)
-    {
+    if (intenzitaSvetla > lightAlarmValue) {
       db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
         visible: true,
       });
     }
-    if(intenzitaSvetla < lightAlarmValue)
-    {
+    if (intenzitaSvetla < lightAlarmValue) {
       db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
         visible: false,
       });
     }
-
-  }
+  };
 
   const getNotificationTemperatureInfo = () => {
     if (
@@ -302,8 +299,8 @@ export default function Home() {
       setVisibleTemperatureAlarm(false);
     }
     if (
-      (parseInt(teplota) < parseInt(lowerTemperature) ||
-      parseInt(teplota) > parseInt(highTemperature))
+      parseInt(teplota) < parseInt(lowerTemperature) ||
+      parseInt(teplota) > parseInt(highTemperature)
     ) {
       db.collection("Automation").doc("temperatureAlarm").update({
         visible: false,
@@ -311,8 +308,7 @@ export default function Home() {
       });
       setVisibleTemperatureAlarm(false);
     }
-
-  }
+  };
 
   const getNotificationInfo = () => {
     if (zrazky >= 1001) {
@@ -613,7 +609,14 @@ export default function Home() {
       <div className="body">
         <div className="home-container">
           <div className="karty">
-            <WeatherDashCard zrazky = {zrazky} teplota = {teplota} intenzitaSvetla = {intenzitaSvetla} prach={prach} vlhkost = {vlhkost} tlak={tlak}/>
+            <WeatherDashCard
+              zrazky={zrazky}
+              teplota={teplota}
+              intenzitaSvetla={intenzitaSvetla}
+              prach={prach}
+              vlhkost={vlhkost}
+              tlak={tlak}
+            />
           </div>
           <div className="karta2">
             <ValueSider />
@@ -894,7 +897,7 @@ export default function Home() {
             <div className="">
               <div
                 className="automation-list-element"
-                style={{ backgroundColor: backgroundColor }}
+                style={{ backgroundColor: backgroundColor, minWidth: "365px" }}
               >
                 Auto lights
                 <Button id="B1" color="secondary" onClick={handleClick}>
@@ -903,7 +906,7 @@ export default function Home() {
               </div>
               <div
                 className="automation-list-element"
-                style={{ backgroundColor: backgroundColor2 }}
+                style={{ backgroundColor: backgroundColor2, minWidth: "365px" }}
               >
                 Rain alarm
                 <Button id="B2" color="secondary" onClick={handleClick}>
@@ -912,7 +915,7 @@ export default function Home() {
               </div>
               <div
                 className="automation-list-element"
-                style={{ backgroundColor: backgroundColor3 }}
+                style={{ backgroundColor: backgroundColor3, minWidth: "365px" }}
               >
                 Temperature alarm
                 <Button id="B3" color="secondary" onClick={handleClick}>
@@ -921,7 +924,7 @@ export default function Home() {
               </div>
               <div
                 className="automation-list-element"
-                style={{ backgroundColor: backgroundColor4 }}
+                style={{ backgroundColor: backgroundColor4, minWidth: "365px" }}
               >
                 Wind alarm
                 <Button id="B4" color="secondary" onClick={handleClick}>
@@ -932,7 +935,10 @@ export default function Home() {
                 return (
                   <div
                     className="automation-list-element"
-                    style={{ backgroundColor: backgroundColor4 }}
+                    style={{
+                      backgroundColor: backgroundColor4,
+                      minWidth: "365px",
+                    }}
                   >
                     {x.name}
                     <Button id={x.id} color="secondary" onClick={handleClick}>
@@ -951,7 +957,12 @@ export default function Home() {
             {visibleRainAlarm && (
               <div className="rain-notification">
                 Rain alert
-                <Button id="B8" color="secondary" onClick={handleClick}>
+                <Button
+                  id="B8"
+                  color="secondary"
+                  style={{ display: "absolute", top: "-25px" }}
+                  onClick={handleClick}
+                >
                   {"ACK"}
                 </Button>
               </div>
@@ -959,7 +970,12 @@ export default function Home() {
             {visibleTemperatureAlarm && (
               <div className="temperature-notification">
                 Temperature alert
-                <Button id="B9" color="secondary" onClick={handleClick}>
+                <Button
+                  id="B9"
+                  color="secondary"
+                  style={{ display: "absolute", top: "-25px" }}
+                  onClick={handleClick}
+                >
                   {"ACK"}
                 </Button>
               </div>
@@ -967,15 +983,18 @@ export default function Home() {
             {visibleWindAlarm && (
               <div className="wind-notification">
                 Wind alert
-                <Button id="B7" color="secondary" onClick={handleClick}>
+                <Button
+                  id="B7"
+                  color="secondary"
+                  style={{ display: "absolute", top: "-25px" }}
+                  onClick={handleClick}
+                >
                   {"ACK"}
                 </Button>
               </div>
             )}
             {visibleLightAlarm && (
-              <div className="light-notification">
-                Light alert
-              </div>
+              <div className="light-notification">Light alert</div>
             )}
           </div>
           <div className="door-check-card">
