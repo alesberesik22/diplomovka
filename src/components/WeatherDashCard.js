@@ -61,45 +61,41 @@ function WeatherDashCard(props) {
   const [weather, setWeather] = useState([]);
 
   const getWeather = () => {
-    db.collection("Weather").onSnapshot(function (querySnapshot) {
-      setWeather(
-        querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          intenzitaSvetla: doc.data().intenzitaSvetla,
-          prach: doc.data().prach,
-          teplota: doc.data().teplota,
-          tlak: doc.data().tlak,
-          vlhkost: doc.data().vlhkost,
-          zrazky: doc.data().zrazky,
-        }))
-      );
-    });
+    // db.collection("Weather").doc("ls4DRvAxQOkldD357s9L").onSnapshot(function (querySnapshot) {
+    //   setWeather(
+    //     querySnapshot.docs.map((doc) => ({
+    //       id: doc.id,
+    //       intenzitaSvetla: doc.data().intenzitaSvetla,
+    //       prach: doc.data().prach,
+    //       teplota: doc.data().teplota,
+    //       tlak: doc.data().tlak,
+    //       vlhkost: doc.data().vlhkost,
+    //       zrazky: doc.data().zrazky,
+    //     }))
+    //   );
+    // });
   };
 
   useEffect(() => {
     getWeather();
-  }); //blank to run only on first launch
+  },[]); //blank to run only on first launch
 
   return (
     <div className="container">
       <div className="nadpis">Pocasie</div>
       <div className="temperature-value">
-        {weather.map((poc) => (
-          <div className="value">{poc.teplota} Stupnov</div>
-        ))}
+          <div className="value">{props.teplota} Stupnov</div>
         <img className="image" src={temperature} alt="Ikona pocasia" />
       </div>
       <div className="weather-info">Informacie o pocasi</div>
-      {weather.map((poc) => (
         <div className="weather-info-container">
-          <WeatherInfoComponent name="Vlhkost" value={poc.vlhkost} />
-          <WeatherInfoComponent name="Zrazky" value={poc.zrazky} />
-          <WeatherInfoComponent name="Tlak" value={poc.tlak} />
-          <WeatherInfoComponent name="Prach" value={poc.prach} />
-          <WeatherInfoComponent name="Svetlo" value={poc.intenzitaSvetla} />
+          <WeatherInfoComponent name="Vlhkost" value={props.vlhkost} />
+          <WeatherInfoComponent name="Zrazky" value={props.zrazky} />
+          <WeatherInfoComponent name="Tlak" value={props.tlak} />
+          <WeatherInfoComponent name="Prach" value={props.prach} />
+          <WeatherInfoComponent name="Svetlo" value={props.intenzitaSvetla} />
           <WeatherInfoComponent name="Vietor" value="6 km/h" />
         </div>
-      ))}
     </div>
   );
 }

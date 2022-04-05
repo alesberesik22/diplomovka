@@ -74,6 +74,9 @@ export default function Home() {
   const [visibleWindAlarm, setVisibleWindAlarm] = useState(true);
   const [visibleLightAlarm, setVisibleLightAlarm] = useState(true);
   const [zrazky, setZrazky] = useState([]);
+  const [vlhkost, setVlhkost] = useState([]);
+  const [prach, setPrach] = useState([]);
+  const [tlak, setTlak] = useState([]);
   const [intenzitaSvetla, setIntenzitaSvetla] = useState([]);
   const [teplota, setTeplota] = useState([]);
   const [lowerTemperature, setLowerTemperature] = useState([]);
@@ -123,11 +126,24 @@ export default function Home() {
   useEffect(() => {
     getDoorInfo();
     getWeather();
-    getNotificationInfo();
+    //getNotificationInfo();
     getAlarmList();
     getAllDevices();
     getAutomationInfo();
   }, []); //blank to run only on first launch
+
+  useEffect(() => {
+    console.log("Som tu ");
+    getNotificaionRainInfo();
+  },[zrazky])
+
+  useEffect(()=> {
+    getNotificationsLightInfo();
+  },[intenzitaSvetla])
+
+  useEffect(()=> {
+    getNotificationTemperatureInfo();
+  },[teplota])
 
   useEffect(() => {
     //var handle = setInterval(getDoorInfo, 6000);
@@ -178,7 +194,9 @@ export default function Home() {
         setZrazky(docSnapshot.data().zrazky);
         setIntenzitaSvetla(docSnapshot.data().intenzitaSvetla);
         setTeplota(docSnapshot.data().teplota);
-        setZrazky(docSnapshot.data().zrazky);
+        setVlhkost(docSnapshot.data().vlhkost);
+        setPrach(docSnapshot.data().prach);
+        setTlak(docSnapshot.data().tlak);
       });
   };
 
@@ -218,8 +236,86 @@ export default function Home() {
         setVisibleWindAlarm(docSnapshot.data().visible);
       });
   };
-  const getNotificationInfo = () => {
+
+  const getNotificaionRainInfo = () => {
     if (zrazky >= 1000) {
+      setLightConfirmed(false);
+      setVisibleLightAlarm(false);
+      db.collection("Automation").doc("rainAlarm").update({
+        visible: false,
+        confirmed: false,
+      });
+    }
+    if (zrazky < 1000 && rainConfirmed === false) {
+      db.collection("Automation").doc("rainAlarm").update({
+        visible: true,
+      });
+      setVisibleRainAlarm(true);
+    }
+    if (zrazky < 1000 && rainConfirmed === true) {
+      console.log("zrazkyposledne");
+      db.collection("Automation").doc("rainAlarm").update({
+        visible: false,
+        confirmed: true,
+      });
+      setVisibleRainAlarm(false);
+    }
+  }
+
+  const getNotificationsLightInfo = () => {
+    if(intenzitaSvetla > lightAlarmValue)
+    {
+      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+        visible: true,
+      });
+    }
+    if(intenzitaSvetla < lightAlarmValue)
+    {
+      db.collection("Automation").doc("nUgRm4cQUvxvuB4N9Jqi").update({
+        visible: false,
+      });
+    }
+
+  }
+
+  const getNotificationTemperatureInfo = () => {
+    if (
+      parseInt(teplota) > parseInt(lowerTemperature) &&
+      parseInt(teplota) < parseInt(highTemperature) &&
+      checked3 == true &&
+      temperatureConfirmed == false
+    ) {
+      db.collection("Automation").doc("temperatureAlarm").update({
+        visible: true,
+      });
+      setVisibleTemperatureAlarm(true);
+    }
+    if (
+      parseInt(teplota) > parseInt(lowerTemperature) &&
+      parseInt(teplota) < parseInt(highTemperature) &&
+      checked3 == true &&
+      temperatureConfirmed == true
+    ) {
+      db.collection("Automation").doc("temperatureAlarm").update({
+        visible: false,
+      });
+      setVisibleTemperatureAlarm(false);
+    }
+    if (
+      (parseInt(teplota) < parseInt(lowerTemperature) ||
+      parseInt(teplota) > parseInt(highTemperature))
+    ) {
+      db.collection("Automation").doc("temperatureAlarm").update({
+        visible: false,
+        confirmed: false,
+      });
+      setVisibleTemperatureAlarm(false);
+    }
+
+  }
+
+  const getNotificationInfo = () => {
+    if (zrazky >= 1001) {
       setLightConfirmed(false);
       setVisibleLightAlarm(false);
       db.collection("Automation").doc("rainAlarm").update({
@@ -517,7 +613,7 @@ export default function Home() {
       <div className="body">
         <div className="home-container">
           <div className="karty">
-            <WeatherDashCard />
+            <WeatherDashCard zrazky = {zrazky} teplota = {teplota} intenzitaSvetla = {intenzitaSvetla} prach={prach} vlhkost = {vlhkost} tlak={tlak}/>
           </div>
           <div className="karta2">
             <ValueSider />
@@ -879,9 +975,6 @@ export default function Home() {
             {visibleLightAlarm && (
               <div className="light-notification">
                 Light alert
-                <Button id="B6" color="secondary" onClick={handleClick}>
-                  {"ACK"}
-                </Button>
               </div>
             )}
           </div>
