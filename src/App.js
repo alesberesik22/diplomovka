@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 import { AnimatePresence } from "framer-motion";
-import "font-awesome/css/font-awesome.min.css";
+//import "font-awesome/css/font-awesome.min.css";
 
 import "./App.css";
 
@@ -22,6 +22,9 @@ import livingroom from "./components/pages/livingroom";
 import bedroom from "./components/pages/bedroom";
 import kitchen from "./components/pages/kitchen";
 import bathroom from "./components/pages/bathroom";
+import Humidity from "./components/pages/weather/Humidity";
+import Pressure from "./components/pages/weather/Pressure"
+import Rain from "./components/pages/weather/Rain"
 import ToDo from "./components/pages/ToDo";
 import { db } from "./components/firebase_conf";
 import Settings from "./components/pages/Settings";
@@ -218,6 +221,9 @@ function App() {
               <Route path="/Settings" exact component={Settings2} />
               <Route path="/teplota" exact component={Temperature} />
               <Route path="/settings2" exact component={Settings2} />
+              <Route path="/humidity"exact component={Humidity} />
+              <Route path ="/pressure"exact component={Pressure} />
+              <Route path = "/rain" exact component={Rain} />
               {/* <Route path="/login" exact component={Login} /> */}
             </Switch>
           </AnimatePresence>

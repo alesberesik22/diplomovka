@@ -1,9 +1,8 @@
 import React from 'react'
 import WeatherBody from './WeatherBody'
-
 import './Temperature.css'
 
-class Temperature extends React.Component {
+class Humidity extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -24,18 +23,14 @@ class Temperature extends React.Component {
           isLoaded:true
         });
       })
-      console.log("ziskane data", this.state.temp);
   }
   render() {
     if(!this.state.isLoaded) {
       return (<div><h1>Wait some time...</h1></div>); 
     }
 
-    const minTemp = this.state.temp.map(el => {
-      return parseInt(el.low_temp);
-    })
-    const maxTemp = this.state.temp.map(el => {
-      return parseInt(el.max_temp)
+    const rainPercentage = this.state.temp.map(el => {
+      return parseInt(el.pop);
     })
     const icon = this.state.temp.map(el=> {
       return String(el.weather.code);
@@ -52,13 +47,13 @@ class Temperature extends React.Component {
     
   return (
     <div className="Temperature">
-      Temperature forecast
+      Rain % forecast
       <div className='weatherContainer pt -3 pb-3'>
-        <WeatherBody day={date[0]} icon={icon[0]} minTemp={minTemp[0]} maxTemp={maxTemp[0]} description={description[0]}/>
-        <WeatherBody day={date[1]} icon={icon[1]} minTemp={minTemp[1]} maxTemp={maxTemp[1]} description={description[1]}/>
-        <WeatherBody day={date[2]} icon={icon[2]} minTemp={minTemp[2]} maxTemp={maxTemp[2]} description={description[2]}/>
-        <WeatherBody day={date[3]} icon={icon[3]} minTemp={minTemp[3]} maxTemp={maxTemp[3]} description={description[3]}/>
-        <WeatherBody day={date[4]} icon={icon[4]} minTemp={minTemp[4]} maxTemp={maxTemp[4]} description={description[4]}/>
+        <WeatherBody day={date[0]} icon={icon[0]} minTemp={rainPercentage[0]} description={description[0]}/>
+        <WeatherBody day={date[1]} icon={icon[1]} minTemp={rainPercentage[1]} description={description[1]}/>
+        <WeatherBody day={date[2]} icon={icon[2]} minTemp={rainPercentage[2]} description={description[2]}/>
+        <WeatherBody day={date[3]} icon={icon[3]} minTemp={rainPercentage[3]} description={description[3]}/>
+        <WeatherBody day={date[4]} icon={icon[4]} minTemp={rainPercentage[4]} description={description[4]}/>
       </div>
     </div>
   );
@@ -66,4 +61,4 @@ class Temperature extends React.Component {
 };
 
 
-export default Temperature
+export default Humidity

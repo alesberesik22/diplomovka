@@ -12,7 +12,7 @@ function Navbar({ handleLogout }) {
     <>
       <nav className="navbar">
         <Link to="/" className="navbar-logo">
-          Domaca automatizacia <i class="fas fa-grip-lines-vertical" />
+          Home automation <i class="fas fa-grip-lines-vertical" />
         </Link>
         <div className="menu-icon" onClick={handleClick}>
           <i className={click ? "fas fa-times" : "fas - fa-bars"} />

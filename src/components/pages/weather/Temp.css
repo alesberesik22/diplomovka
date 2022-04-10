@@ -1,0 +1,11 @@
+.Temp {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #212529;
+}
+.Temp span {
+    margin: 0 3px;
+}
+.Temp min{
+    font-weight: 700;
+}
