@@ -1,5 +1,8 @@
 import React from 'react'
 import WeatherBody from './WeatherBody'
+import {HalfMalf} from 'react-spinner-animated';
+
+import 'react-spinner-animated/dist/index.css'
 import './Temperature.css'
 
 class Humidity extends React.Component {
@@ -26,7 +29,7 @@ class Humidity extends React.Component {
   }
   render() {
     if(!this.state.isLoaded) {
-      return (<div><h1>Wait some time...</h1></div>); 
+      return (<HalfMalf center={true}/>); 
     }
 
     const pressure = this.state.temp.map(el => {

@@ -1,6 +1,8 @@
 import React from 'react'
 import WeatherBody from './WeatherBody'
+import {HalfMalf} from 'react-spinner-animated';
 
+import 'react-spinner-animated/dist/index.css'
 import './Temperature.css'
 
 class Temperature extends React.Component {
@@ -17,7 +19,7 @@ class Temperature extends React.Component {
     fetch("https://api.weatherbit.io/v2.0/forecast/daily?city=Kysucke%20Nove%20Mesto&country=SK&key=653751607c6140788d3a432df60e5222")
       .then((res) => res.json())
       .then((json) => {
-
+        console.log(json.data);
         this.setState({
           temp: json.data,
           city: json.city_name,
@@ -28,7 +30,7 @@ class Temperature extends React.Component {
   }
   render() {
     if(!this.state.isLoaded) {
-      return (<div><h1>Wait some time...</h1></div>); 
+      return (<HalfMalf center={true}/>); 
     }
 
     const minTemp = this.state.temp.map(el => {
@@ -38,6 +40,7 @@ class Temperature extends React.Component {
       return parseInt(el.max_temp)
     })
     const icon = this.state.temp.map(el=> {
+      console.log(el.weather.code);
       return String(el.weather.code);
     })
     const description = this.state.temp.map(el => {
