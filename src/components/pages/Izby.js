@@ -43,11 +43,6 @@ export default function Izby() {
       description: "7 zariadeni",
       id: "/hall",
     },
-    {
-      image: "https://picsum.photos/320/250",
-      title: "Toto je siesty nazov",
-      description: "Toto je siesty popis",
-    },
   ];
 
   return (
@@ -56,6 +51,7 @@ export default function Izby() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
+      <h1>Rooms</h1>
       <div className="body">
         <CardSlider slides={slides} id={slides.id} />
       </div>

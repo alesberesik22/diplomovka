@@ -22,8 +22,8 @@ function ValueSider(props) {
   }, []); //blank to run only on first launch
 
   const getDeviceInfo = () => {
-    db.collection("Devices")
-      .doc("VgkSjvc6cnNYmfBOT3vJ")
+    db.collection("Automation")
+      .doc("0x588e81fffef768b5")
       .onSnapshot((docSnapshot) => {
         setClick(docSnapshot.data().off);
         setLight(docSnapshot.data().intensity);
@@ -35,7 +35,7 @@ function ValueSider(props) {
 
   const handleClick = () => {
     console.log("click", !click);
-    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+    db.collection("Automation").doc("0x588e81fffef768b5").update({
       off: !click,
     });
   };
@@ -53,7 +53,7 @@ function ValueSider(props) {
   };
 
   const sendLight = (event, newValue) => {
-    db.collection("Devices").doc("VgkSjvc6cnNYmfBOT3vJ").update({
+    db.collection("Automation").doc("0x588e81fffef768b5").update({
       intensity: newValue,
     });
   };

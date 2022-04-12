@@ -155,12 +155,36 @@ export default function Livingroom() {
         lockList: lockDevices,
       });
     }
+    if (lightDevices.length === 0) {
+      db.collection("Automation")
+        .doc("bedroom")
+        .update({
+          list: [{}],
+        });
+      setLightDevices([{}]);
+    }
+    if (plugDevices.length === 0) {
+      db.collection("Automation")
+        .doc("bedroom")
+        .update({
+          listPlug: [{}],
+        });
+      setPlugDevices([{}]);
+    }
+    if (lockDevices.length === 0) {
+      db.collection("Automation")
+        .doc("bedroom")
+        .update({
+          lockList: [{}],
+        });
+      setLockDevices([{}]);
+    }
     setRemoveFromDB(false);
   }, [removeFromDB]);
 
   useEffect(() => {
     if (displayLight === true) {
-      if (lightDevices[0].doc === undefined) {
+      if (!lightDevices[0].doc) {
         console.log("empty");
         db.collection("Automation")
           .doc(deviceSelectedToAdd)
@@ -208,7 +232,7 @@ export default function Livingroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (plugDevices[0].doc === undefined) {
+          if (!plugDevices[0].doc) {
             setPlugDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -237,7 +261,7 @@ export default function Livingroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (lockDevices[0].doc === undefined) {
+          if (!lockDevices[0].doc) {
             setLockDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -300,6 +324,7 @@ export default function Livingroom() {
 
   return (
     <div>
+      <h1>Livingroom</h1>
       <Box sx={{ "& > :not(style)": { m: 1 } }}>
         <Fab color="primary" aria-label="add" onClick={handleAddDevices}>
           <AddIcon />
@@ -368,8 +393,11 @@ export default function Livingroom() {
           <Button onClick={confirmAddDevice}>Confirm</Button>
         </Box>
       </Modal>
-      {lightDevices[0].doc !== undefined
-        ? lightDevices.map((device) => {
+      {lightDevices &&
+        lightDevices.map((device) => {
+          console.log("size ", lightDevices[0].doc);
+          if (lightDevices[0].doc) {
+            console.log("som tu");
             return (
               <div className="lightCardsFloat">
                 <LightControll
@@ -378,10 +406,14 @@ export default function Livingroom() {
                 ></LightControll>
               </div>
             );
-          })
-        : null}
-      {plugDevices[0].doc !== undefined
-        ? plugDevices.map((device) => {
+          } else {
+            console.log("neni som tu");
+            console.log(lightDevices);
+          }
+        })}
+      {plugDevices &&
+        plugDevices.map((device) => {
+          if (plugDevices[0].doc) {
             return (
               <div className="lightCardsFloat">
                 <Plug
@@ -391,10 +423,11 @@ export default function Livingroom() {
                 ></Plug>
               </div>
             );
-          })
-        : null}
-      {lockDevices[0].doc !== undefined
-        ? lockDevices.map((device) => {
+          }
+        })}
+      {lockDevices &&
+        lockDevices.map((device) => {
+          if (lockDevices[0].doc) {
             return (
               <div className="lightCardsFloat">
                 <DoorSensor
@@ -404,8 +437,8 @@ export default function Livingroom() {
                 />
               </div>
             );
-          })
-        : null}
+          }
+        })}
       <div className="lightCardsFloat">
         <LightControll
           doc="VgkSjvc6cnNYmfBOT3vJ"

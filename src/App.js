@@ -1,16 +1,10 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 
 import { AnimatePresence } from "framer-motion";
-//import "font-awesome/css/font-awesome.min.css";
 
 import "./App.css";
 
@@ -20,20 +14,19 @@ import Izby from "./components/pages/Izby";
 import Pocasie from "./components/pages/Pocasie";
 import livingroom from "./components/pages/livingroom";
 import bedroom from "./components/pages/bedroom";
+import Hall from "./components/pages/hall";
 import kitchen from "./components/pages/kitchen";
 import bathroom from "./components/pages/bathroom";
 import Humidity from "./components/pages/weather/Humidity";
-import Pressure from "./components/pages/weather/Pressure"
-import Rain from "./components/pages/weather/Rain"
+import Pressure from "./components/pages/weather/Pressure";
+import Rain from "./components/pages/weather/Rain";
 import ToDo from "./components/pages/ToDo";
 import { db } from "./components/firebase_conf";
-import Settings from "./components/pages/Settings";
 import Temperature from "./components/pages/weather/Temperature";
 import Settings2 from "./components/pages/Settings2";
 import Login from "./components/Login";
 
 import firebase from "firebase";
-import { firestore } from "firebase";
 
 var prach, teplota, vlhkost, intenzitaSvetla, zrazky, tlak;
 
@@ -43,7 +36,6 @@ function App() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const [hasAccount, setHasAccount] = useState(false);
   // document.body.style.overflow='hidden'
   document.body.classList.add("no-sroll");
 
@@ -221,10 +213,10 @@ function App() {
               <Route path="/Settings" exact component={Settings2} />
               <Route path="/teplota" exact component={Temperature} />
               <Route path="/settings2" exact component={Settings2} />
-              <Route path="/humidity"exact component={Humidity} />
-              <Route path ="/pressure"exact component={Pressure} />
-              <Route path = "/rain" exact component={Rain} />
-              {/* <Route path="/login" exact component={Login} /> */}
+              <Route path="/humidity" exact component={Humidity} />
+              <Route path="/pressure" exact component={Pressure} />
+              <Route path="/rain" exact component={Rain} />
+              <Route path="/hall" exact component={Hall} />
             </Switch>
           </AnimatePresence>
         </Router>

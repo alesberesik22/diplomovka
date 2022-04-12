@@ -71,59 +71,62 @@ export default function Pocasie() {
   };
 
   return (
-    <div className="body">
-      {poc.map((poc) => (
-        <div className="main-slider-container">
-          <MdChevronLeft
-            size={40}
-            className="slider-icon left"
-            onClick={slideLeft}
-          />
-          <div id="slider">
-            <WeatherCard
-              weather="Teplota"
-              id="teplota"
-              value={poc.teplota + " °C"}
-              image={highTemperature}
+    <div>
+      <h1>Weather</h1>
+      <div className="body">
+        {poc.map((poc) => (
+          <div className="main-slider-container">
+            <MdChevronLeft
+              size={40}
+              className="slider-icon left"
+              onClick={slideLeft}
             />
-            <WeatherCard
-              weather="Vlhkost"
-              id="humidity"
-              value={poc.vlhkost + " %"}
-              image={humidity}
-            />
-            <WeatherCard
-              weather="Tlak"
-              id="pressure"
-              value={poc.tlak + " ps"}
-              image={pressure}
-            />
-            <WeatherCard
-              weather="Zrazky"
-              id="rain"
-              value={poc.zrazky}
-              image={rain}
-            />
-            <WeatherCard
-              weather="Intenzita svetla"
-              id="clouds"
-              value={poc.intenzitaSvetla + " "}
-              image={lightIntensity}
-            />
-            <WeatherCard
-              weather="Znecistenie"
-              id="dust"
-              value={poc.teplota + ""}
-              image={dust}
+            <div id="slider">
+              <WeatherCard
+                weather="Temperature"
+                id="teplota"
+                value={poc.teplota + " °C"}
+                image={highTemperature}
+              />
+              <WeatherCard
+                weather="Humidity"
+                id="humidity"
+                value={poc.vlhkost + " %"}
+                image={humidity}
+              />
+              <WeatherCard
+                weather="Pressure"
+                id="pressure"
+                value={poc.tlak + " ps"}
+                image={pressure}
+              />
+              <WeatherCard
+                weather="Rain"
+                id="rain"
+                value={poc.zrazky}
+                image={rain}
+              />
+              <WeatherCard
+                weather="Light intensity"
+                id="clouds"
+                value={poc.intenzitaSvetla + " "}
+                image={lightIntensity}
+              />
+              <WeatherCard
+                weather="Dust"
+                id="dust"
+                value={poc.teplota + ""}
+                image={dust}
+              />
+            </div>
+            <MdChevronRight
+              size={40}
+              className="slider-icon right"
+              onClick={slideRight}
             />
           </div>
-          <MdChevronRight
-            size={40}
-            className="slider-icon right"
-            onClick={slideRight}
-          />
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }

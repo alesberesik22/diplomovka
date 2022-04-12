@@ -31,7 +31,7 @@ const style = {
   p: 17,
 };
 
-export default function Bathroom() {
+export default function Hall() {
   const [displayLight, setDisplayLight] = useState(false);
   const [displayPlug, setDisplayPlug] = useState(false);
   const [displayLock, setDisplayLock] = useState(false);
@@ -60,22 +60,22 @@ export default function Bathroom() {
         setDevices(docSnapshot.data().device);
       });
     db.collection("Automation")
-      .doc("bathroom")
+      .doc("hall")
       .onSnapshot((docSnapshot) => {
         setLightDevices(docSnapshot.data().list);
       });
     db.collection("Automation")
-      .doc("bathroom")
+      .doc("hall")
       .onSnapshot((docSnapshot) => {
         setPlugDevices(docSnapshot.data().listPlug);
       });
     db.collection("Automation")
-      .doc("bathroom")
+      .doc("hall")
       .onSnapshot((docSnapshot) => {
         setLockDevices(docSnapshot.data().lockList);
       });
     db.collection("Automation")
-      .doc("bathroom")
+      .doc("hall")
       .onSnapshot((docSnapshot) => {
         setAllDevices(docSnapshot.data().list);
         setAllDevices([...allDevices, docSnapshot.data().listPlug]);
@@ -156,7 +156,7 @@ export default function Bathroom() {
 
   useEffect(() => {
     if (removeFromDB === true) {
-      db.collection("Automation").doc("bathroom").set({
+      db.collection("Automation").doc("hall").set({
         list: lightDevices,
         listPlug: plugDevices,
         lockList: lockDevices,
@@ -164,7 +164,7 @@ export default function Bathroom() {
     }
     if (lightDevices.length === 0) {
       db.collection("Automation")
-        .doc("bathroom")
+        .doc("hall")
         .update({
           list: [{}],
         });
@@ -172,7 +172,7 @@ export default function Bathroom() {
     }
     if (plugDevices.length === 0) {
       db.collection("Automation")
-        .doc("bathroom")
+        .doc("hall")
         .update({
           listPlug: [{}],
         });
@@ -180,7 +180,7 @@ export default function Bathroom() {
     }
     if (lockDevices.length === 0) {
       db.collection("Automation")
-        .doc("bathroom")
+        .doc("hall")
         .update({
           lockList: [{}],
         });
@@ -294,7 +294,7 @@ export default function Bathroom() {
 
   useEffect(() => {
     if (sendPlugToDB === true) {
-      db.collection("Automation").doc("bathroom").set({
+      db.collection("Automation").doc("hall").set({
         list: lightDevices,
         listPlug: plugDevices,
         lockList: lockDevices,
@@ -305,7 +305,7 @@ export default function Bathroom() {
 
   useEffect(() => {
     if (sendToDB === true) {
-      db.collection("Automation").doc("bathroom").set({
+      db.collection("Automation").doc("hall").set({
         list: lightDevices,
         listPlug: plugDevices,
         lockList: lockDevices,
@@ -316,7 +316,7 @@ export default function Bathroom() {
 
   useEffect(() => {
     if (sendLockToDB === true) {
-      db.collection("Automation").doc("bathroom").set({
+      db.collection("Automation").doc("hall").set({
         list: lightDevices,
         listPlug: plugDevices,
         lockList: lockDevices,
@@ -331,7 +331,7 @@ export default function Bathroom() {
 
   return (
     <div>
-      <h1>Bathroom</h1>
+      <h1>Hall</h1>
       <Box sx={{ "& > :not(style)": { m: 1 } }}>
         <Fab color="primary" aria-label="add" onClick={handleAddDevices}>
           <AddIcon />

@@ -71,9 +71,10 @@ const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 function Settings2() {
   return (
+    <div>
+      <h1>Settings</h1>
     <div className="wrapper">
       <Card img={lightIcon} name="Auto lights" id="1" />
-
       <Card img={rainIcon} name="Rain alarm" id="2" />
       <Card img={tempIcon} name="Temperature alarm" id="3" />
       <Card img={windIcon} name="Wind alarm" id="4" />
@@ -81,7 +82,7 @@ function Settings2() {
       <Card img={deviceIcon} name="Connected ZigBee devices" id="6" />
       <Card img={deviceIcon} name="Add devices" id="7" />
     </div>
-  );
+    </div>  );
 }
 
 function Card(props) {

@@ -1,7 +1,4 @@
-import firebase from "firebase";
-import { firestore } from "firebase";
 import React, { useEffect, useState } from "react";
-import { db } from "../components/firebase_conf";
 import Background from "../components/images/background.png";
 
 import "./Login.css";
