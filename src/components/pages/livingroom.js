@@ -140,7 +140,7 @@ export default function Livingroom() {
     }
     if (lockDevices.some((name) => name.doc.includes(deviceSelectedToRemove))) {
       console.log("ano");
-      setPlugDevices(
+      setLockDevices(
         lockDevices.filter((item) => item.doc !== deviceSelectedToRemove)
       );
       setRemoveFromDB(true);
@@ -184,7 +184,7 @@ export default function Livingroom() {
 
   useEffect(() => {
     if (displayLight === true) {
-      if (!lightDevices[0].doc) {
+      if (!lightDevices[0]?.doc) {
         console.log("empty");
         db.collection("Automation")
           .doc(deviceSelectedToAdd)
@@ -232,7 +232,7 @@ export default function Livingroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (!plugDevices[0].doc) {
+          if (!plugDevices[0]?.doc) {
             setPlugDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -261,7 +261,7 @@ export default function Livingroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (!lockDevices[0].doc) {
+          if (!lockDevices[0]?.doc) {
             setLockDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -427,7 +427,12 @@ export default function Livingroom() {
         })}
       {lockDevices &&
         lockDevices.map((device) => {
+          console.log("lockdevices", lockDevices);
           if (lockDevices[0].doc) {
+            console.log("1");
+            console.log("1");
+            console.log("1");
+            console.log("1");
             return (
               <div className="lightCardsFloat">
                 <DoorSensor

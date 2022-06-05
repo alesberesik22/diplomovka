@@ -85,6 +85,7 @@ export default function Home() {
   const [checked2, setChecked2] = useState([]);
   const [checked3, setChecked3] = useState([]);
   const [checked4, setChecked4] = useState([]);
+  const [automationButtons, setAutomationButtons] = useState([]);
   const [backgroundColor, setBackgroundColor] = useState("");
   const [backgroundColor2, setBackgroundColor2] = useState("");
   const [backgroundColor3, setBackgroundColor3] = useState("");
@@ -122,6 +123,8 @@ export default function Home() {
   const [temperatureAlarmOn, setTemperatureAlarmOn] = useState(false);
 
   const [alarmToRemove, setAlarmToRemove] = useState([]);
+
+  const [tlacidlo, setTlacidlo] = useState(false);
 
   useEffect(() => {
     getDoorInfo();
@@ -453,6 +456,15 @@ export default function Home() {
     setAlarmRemovedFromList(false);
   }, [alarmRemovedFromList]);
 
+  useEffect(() => {
+    if (automationButtons.length < alarmsAdded.length - 1) {
+      for (var i = 0; i < alarmsAdded.length; i++) {
+        automationButtons.push(false);
+      }
+      console.log(automationButtons);
+    }
+  }, [alarmsAdded]);
+
   const handleCloseModal = () => {
     setAddToAlarmList(false);
     setRemoveFromAlarmList(false);
@@ -545,7 +557,7 @@ export default function Home() {
     }
     var key = event.target.id;
     console.log("Key", key);
-    alarmsAdded.map((item) => {
+    alarmsAdded.map((item, i) => {
       if (key === item.id) {
         db.collection("Automation")
           .doc(key)
@@ -941,8 +953,17 @@ export default function Home() {
                     }}
                   >
                     {x.name}
-                    <Button id={x.id} color="secondary" onClick={handleClick}>
-                      {checked4 ? "ON" : "OFF"}
+                    <Button
+                      id={x.id}
+                      color="secondary"
+                      onClick={handleClick}
+                      onMouseDown={(event) => {
+                        event.button === 0
+                          ? (automationButtons[i] = !automationButtons[i])
+                          : console.log("nic");
+                      }}
+                    >
+                      {automationButtons[i] ? "ON" : "OFF"}
                     </Button>
                   </div>
                 );

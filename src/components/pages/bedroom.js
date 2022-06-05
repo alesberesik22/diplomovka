@@ -122,10 +122,7 @@ export default function Bedroom() {
   };
 
   const confirmRemoveDevice = () => {
-    if (
-      plugDevices[0].doc &&
-      plugDevices.some((name) => name.doc.includes(deviceSelectedToRemove))
-    ) {
+    if (plugDevices.some((name) => name.doc.includes(deviceSelectedToRemove))) {
       console.log("ano");
       setPlugDevices(
         plugDevices.filter((item) => item.doc !== deviceSelectedToRemove)
@@ -133,7 +130,6 @@ export default function Bedroom() {
       setRemoveFromDB(true);
     }
     if (
-      lightDevices[0].doc &&
       lightDevices.some((name) => name.doc.includes(deviceSelectedToRemove))
     ) {
       console.log("ano light");
@@ -142,12 +138,9 @@ export default function Bedroom() {
       );
       setRemoveFromDB(true);
     }
-    if (
-      lockDevices[0].doc &&
-      lockDevices.some((name) => name.doc.includes(deviceSelectedToRemove))
-    ) {
+    if (lockDevices.some((name) => name.doc.includes(deviceSelectedToRemove))) {
       console.log("ano");
-      setPlugDevices(
+      setLockDevices(
         lockDevices.filter((item) => item.doc !== deviceSelectedToRemove)
       );
       setRemoveFromDB(true);
@@ -191,7 +184,7 @@ export default function Bedroom() {
 
   useEffect(() => {
     if (displayLight === true) {
-      if (!lightDevices[0].doc) {
+      if (!lightDevices[0]?.doc) {
         console.log("empty");
         db.collection("Automation")
           .doc(deviceSelectedToAdd)
@@ -239,7 +232,7 @@ export default function Bedroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (!plugDevices[0].doc) {
+          if (!plugDevices[0]?.doc) {
             setPlugDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -268,7 +261,7 @@ export default function Bedroom() {
       db.collection("Automation")
         .doc(deviceSelectedToAdd)
         .onSnapshot((docSnapshot) => {
-          if (!lockDevices[0].doc) {
+          if (!lockDevices[0]?.doc) {
             setLockDevices([
               {
                 doc: docSnapshot.data().doc,
@@ -420,7 +413,7 @@ export default function Bedroom() {
         })}
       {plugDevices &&
         plugDevices.map((device) => {
-          if ("doc" in plugDevices) {
+          if (plugDevices[0].doc) {
             return (
               <div className="lightCardsFloat">
                 <Plug
@@ -434,7 +427,12 @@ export default function Bedroom() {
         })}
       {lockDevices &&
         lockDevices.map((device) => {
-          if ("doc" in lockDevices) {
+          console.log("lockdevices", lockDevices);
+          if (lockDevices[0].doc) {
+            console.log("1");
+            console.log("1");
+            console.log("1");
+            console.log("1");
             return (
               <div className="lightCardsFloat">
                 <DoorSensor
